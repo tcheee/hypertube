@@ -1,4 +1,4 @@
-/api/.env
-/api/modes/node_modules
-/client/node_modules
-/database/*
+./api/.env
+./api/modes/node_modules
+./client/node_modules
+./database/*
