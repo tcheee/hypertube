@@ -1,0 +1,62 @@
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import {useState, useEffect} from 'react'
+import Container from '@material-ui/core/Container';
+import Notecard from '../Shared/Notecard'
+import Pagination from '@material-ui/lab/Pagination';
+import { Link } from "react-router-dom"
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+        display: 'flex',
+        alignItems:'center'
+      },
+  }));
+
+
+function Home() {
+  const classes = useStyles();
+  const [movies, setMovies] = useState([]) 
+  const [pages, setPages] = useState(1) 
+  const [activePage, setActivePage] = useState(1) 
+
+  useEffect(() => {
+      fetch('https://retoolapi.dev/pchPTP/data')
+        .then(res => {
+            return res.json()
+        })
+        .then((data) => {
+            setMovies(data)
+            setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
+        })
+  }, [])
+
+  const handlePagination = (event, value) => {
+    setActivePage(value);
+  };
+
+  return (
+    <Container>
+         <p> Hello 📺</p>
+            <Grid container spacing={4}>
+                {movies && 
+                movies.map((movie) => (
+                        <Grid item key={movie.id} xs={12} md={6} lg={4}>
+                            <Link to={"/movie/" + movie.id} style={{ textDecoration: 'none' }}>
+                                <Notecard movie={movie} />
+                            </Link>
+                        </Grid>
+                ))}
+            </Grid>
+            <div className={classes.root}>
+            <Pagination count={pages} color="secondary" page={activePage} onChange={handlePagination} align='center'/>
+        </div>
+    </Container>
+  );
+}
+
+export default Home;
