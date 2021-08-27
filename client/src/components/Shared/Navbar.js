@@ -13,6 +13,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import {useState} from 'react'
+import {useHistory, Link} from 'react-router-dom' 
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -77,7 +79,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const classes = useStyles();
-  const [auth, setAuth] = useState(false);
+  const history = useHistory();
+  const [auth, setAuth] = useState(true);
+  const [search, setSearch] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -100,6 +104,29 @@ function Navbar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleTyping = (event) => {
+    event.preventDefault();
+    setSearch(event.target.value)
+  }
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    console.log(search)
+    axios.post('http://localhost:5000/api/search', {
+      query: search,
+    })
+    .then(function (response) {
+      history.push({
+        pathname: '/home',
+        search: '?q=' + search,
+        state: { result: response.data }
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -162,13 +189,16 @@ function Navbar() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-          📺 Hypertube
-          </Typography>
+          <Link to="/home" style={{ textDecoration: 'none', color: '#FFF'  }}>
+            <Typography className={classes.title} variant="h6" noWrap>
+            📺 Hypertube
+            </Typography>
+          </Link>
           {auth && (<div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
+            <form onSubmit={handleSearch}>
             <InputBase
               placeholder="Search…"
               classes={{
@@ -176,7 +206,9 @@ function Navbar() {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleTyping}
             />
+            </form>
           </div>)}
           <div className={classes.grow} />
           {auth && ( <div className={classes.sectionDesktop}>

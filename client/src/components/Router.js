@@ -15,6 +15,9 @@ function App() {
                 <Route exact path="/"> 
                     <Login />
                 </Route>
+                <Route path="/home">
+                    <Home />
+                </Route>
                 <Route path="/register">
                     <Register />
                 </Route>
@@ -23,9 +26,6 @@ function App() {
                 </Route>
                 <Route path="/profile/:username">
                     <Profile />
-                </Route>
-                <Route path="/home">
-                    <Home />
                 </Route>
                 <Route path="/movie/:id">
                     <Movie />

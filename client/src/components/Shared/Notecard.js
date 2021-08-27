@@ -19,11 +19,11 @@ function Notecard({movie}) {
                 <CardMedia
                     className={classes.media}
                     image="https://via.placeholder.com/400"
-                    title={movie.column_2}
+                    title={movie.column_2 || movie.title}
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {movie.column_2}
+                        {movie.column_2 || movie.title}
                     </Typography>
                 </CardContent>
             </Card>

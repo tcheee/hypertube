@@ -2,10 +2,13 @@ import {useParams} from "react-router-dom"
 import {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import ReactPlayer from 'react-player'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { Link, useLocation } from "react-router-dom"
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -22,6 +25,14 @@ function Movie() {
     const classes = useStyles();
     let { id } = useParams()
     const [comments, setComments] = useState(null)
+    const [magnet, setMagnet] = useState(null)
+    const [playing, setPlaying] = useState(false)
+    const location = useLocation();
+
+    if (location.state && magnet == null) {
+        console.log(location.state.magnet)
+        setMagnet(location.state.magnet)
+    }
 
     useEffect(() => {
         fetch('https://retoolapi.dev/Y3m1i2/data')
@@ -34,6 +45,21 @@ function Movie() {
           })
     }, [])
 
+    function handleSubmit(event) {
+        event.preventDefault()
+        console.log(magnet)
+
+        axios.post('http://localhost:5000/api/stream', {
+            magnet: magnet,
+        })
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     return (
             <Grid container 
                 spacing={0}
@@ -43,9 +69,29 @@ function Movie() {
             >
                 <div> 
                     <h2 className={classes.title}> Movie Title for {id} </h2>
-                    <video controls width="800" align="center">
-                        <source src="https://media.w3.org/2010/05/bunny/movie.mp4" type="video/mp4" />
-                    </video>
+                    <form onSubmit={handleSubmit}>
+                        <button type='submit'> Launch Bittorent</button>
+                    </form>
+                    {/* <video controls width="800" align="center">
+                        <source src="http://localhost:5000/api/stream" />
+                    </video> */}
+                    <ReactPlayer
+                        className='movie-video'
+                        config={ {
+                            // file: {
+                            //     attributes: {
+                            //         crossOrigin: 'anonymous'
+                            //     },
+                            //     tracks: tracks
+                            // },
+                            showSpinner: true
+                        } }
+                        controls
+                        onPlay={ () => { setPlaying(true) } }
+                        playing
+                        url={ `http://localhost:5000/api/stream/${location.state.magnet}` }
+                        width={ '100%' }
+                        />
                 <form>
                     <TextField
                     id="standard-full-width"

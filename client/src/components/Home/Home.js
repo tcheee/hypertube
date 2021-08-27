@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react'
 import Container from '@material-ui/core/Container';
 import Notecard from '../Shared/Notecard'
 import Pagination from '@material-ui/lab/Pagination';
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +22,19 @@ function Home() {
   const classes = useStyles();
   const [movies, setMovies] = useState([]) 
   const [pages, setPages] = useState(1) 
+  const [query, setQuery] = useState(null)
   const [activePage, setActivePage] = useState(1) 
+  const location = useLocation();
+  if (location.state && query != location.search) {
+    setQuery(location.search)
+  }
+
+  if (location.search != query && location.state) {
+      let data = location.state.result
+      console.log(data)
+      setMovies(data)
+      setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
+  }
 
   useEffect(() => {
       fetch('https://retoolapi.dev/pchPTP/data')
@@ -46,7 +58,7 @@ function Home() {
                 {movies && 
                 movies.map((movie) => (
                         <Grid item key={movie.id} xs={12} md={6} lg={4}>
-                            <Link to={"/movie/" + movie.id} style={{ textDecoration: 'none' }}>
+                            <Link to={{pathname: `/movie/${movie.id}`, state:{magnet:movie.magnet}}} style={{ textDecoration: 'none' }}>
                                 <Notecard movie={movie} />
                             </Link>
                         </Grid>
