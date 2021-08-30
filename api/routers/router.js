@@ -4,7 +4,9 @@ const fs = require('fs');
 const router = express.Router();
 const TorrentSearchApi = require('torrent-search-api');
 const torrentStream = require('torrent-stream');
-let path;
+const OS = require('opensubtitles-api')
+const download = require('download')
+const axios = require('axios')
 
 router.get('/', (req, res) => {
   res.json({msg: "all good, working as expected"});
@@ -13,11 +15,25 @@ router.get('/', (req, res) => {
 router.post("/api/search", async (req, res) => {
   console.log(req.body);
   let search = req.body.query
-  TorrentSearchApi.enableProvider('ThePirateBay')
-  const torrents = await TorrentSearchApi.search(search, 'Video', 25);
-  //let result = await updateTorrents(torrents)
-  console.log("after")
-  res.json(torrents)
+  const encoded = encodeURI(search);
+  //TorrentSearchApi.enableProvider('ThePirateBay')
+  axios.get('https://yts.megaproxy.info/api/v2/list_movies.json?page=1&query_term=' + encoded)
+  .then(function(data) {
+    if (data.data.data) {
+      let result = data.data.data.movies
+      res.json(result)
+    }
+    else {
+      res.json({msg: 'we did not find anything'})
+    }
+  })
+  .catch(function(err) {
+      console.log(err)
+      res.json({msg: 'error while fetching data'})
+  })
+  // const torrents = await TorrentSearchApi.search(search, 'Video', 25);
+  // //let result = await updateTorrents(torrents)
+  // res.json(torrents)
 })
 
 function isVideoFile(fileName) {
@@ -76,11 +92,11 @@ router.get("/api/stream/*", async (req, res) => {
   let num;
   const full_url = req.protocol + '://' + req.get('host') + req.originalUrl
   const match = full_url.match(/(?<=stream\/)(.*)/g)
-  const magnet = match[0]
+  const hash = match[0]
   const { range } = req.headers
-  const streaming_engine = torrentStream(magnet);
-  const download_engine = torrentStream(magnet)
-  launchDownload(download_engine)
+  const streaming_engine = torrentStream(hash);
+  //const download_engine = torrentStream(magnet)
+  //launchDownload(download_engine)
 
   streaming_engine.on('ready', function() {
     streaming_engine.files.forEach(function(file) {
@@ -100,6 +116,28 @@ router.get("/api/stream/*", async (req, res) => {
   streaming_engine.on('download', (index) => {
     console.log(streaming_engine.swarm.downloaded + "was downloaded for streaming! Piece number: " + index)
   })
+})
+
+router.get("/api/subtitles/:id", async (req, res) => {
+  console.log('lets download subtitles')
+  let id = req.params.id
+  OpenSubtitles = new OS({
+    useragent: 'TemporaryUserAgent',
+    username: 'tche42Api',
+    password: 'i3Tli#4Ru0',
+    ssl: false
+  })
+  const result = await OpenSubtitles.search({ imdbid: id })
+  console.log(result)
+  if (result.en) {
+    if(result.en.vtt) {
+      const pathName =__dirname + '/../tmp/' + id + ".vtt"
+      fs.writeFileSync(pathName, await download(result.en.vtt));
+      console.log(pathName)
+      res.setHeader('Content-Type', 'text/vtt')
+      res.send(pathName)
+    }
+  }
 })
 
 module.exports = router;

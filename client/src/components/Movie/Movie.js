@@ -30,8 +30,8 @@ function Movie() {
     const location = useLocation();
 
     if (location.state && magnet == null) {
-        console.log(location.state.magnet)
-        setMagnet(location.state.magnet)
+        console.log(location.state)
+        setMagnet(location.state)
     }
 
     useEffect(() => {
@@ -69,29 +69,29 @@ function Movie() {
             >
                 <div> 
                     <h2 className={classes.title}> Movie Title for {id} </h2>
-                    <form onSubmit={handleSubmit}>
-                        <button type='submit'> Launch Bittorent</button>
-                    </form>
-                    {/* <video controls width="800" align="center">
-                        <source src="http://localhost:5000/api/stream" />
-                    </video> */}
-                    <ReactPlayer
+                    {/* <ReactPlayer
                         className='movie-video'
                         config={ {
-                            // file: {
-                            //     attributes: {
-                            //         crossOrigin: 'anonymous'
-                            //     },
-                            //     tracks: tracks
-                            // },
+                            file: {
+                                attributes: {
+                                    crossOrigin: 'anonymous'
+                                },
+                                tracks: [
+                                    { kind: 'subtitles', src: {`http://localhost:5000/api/subtitles/${location.state.id}`}  , srcLang: 'en', default: true},
+                                ]
+                            },
                             showSpinner: true
                         } }
                         controls
                         onPlay={ () => { setPlaying(true) } }
                         playing
-                        url={ `http://localhost:5000/api/stream/${location.state.magnet}` }
+                        url={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}` }
                         width={ '100%' }
-                        />
+                        /> */}
+                    <video width='100%' controls crossorigin="anonymous">
+                        <source src={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}`} />
+                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}`} default={true} />
+                    </video>
                 <form>
                     <TextField
                     id="standard-full-width"

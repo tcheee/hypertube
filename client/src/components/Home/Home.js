@@ -58,7 +58,7 @@ function Home() {
                 {movies && 
                 movies.map((movie) => (
                         <Grid item key={movie.id} xs={12} md={6} lg={4}>
-                            <Link to={{pathname: `/movie/${movie.id}`, state:{magnet:movie.magnet}}} style={{ textDecoration: 'none' }}>
+                            <Link to={{pathname: `/movie/${movie.id}`, state:{torrents: movie.torrents, id: movie.imdb_code}}} style={{ textDecoration: 'none' }}>
                                 <Notecard movie={movie} />
                             </Link>
                         </Grid>

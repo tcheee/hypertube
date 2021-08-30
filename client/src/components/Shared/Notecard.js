@@ -18,7 +18,7 @@ function Notecard({movie}) {
             <Card elevation={1}>
                 <CardMedia
                     className={classes.media}
-                    image="https://via.placeholder.com/400"
+                    image={movie.large_cover_image}
                     title={movie.column_2 || movie.title}
                 />
                 <CardContent>

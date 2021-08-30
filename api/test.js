@@ -1,14 +1,18 @@
-const OS = require('opensubtitles-api');
-const OpenSubtitles = new OS({
-    useragent:'TemporaryUserAgent',
-    username: 'tche42Api',
-    password: 'i3Tli#4Ru0',
-    ssl: false
-});
+const axios = require('axios')
 
-async function searchSubtitles() {
-    const res = await OpenSubtitles.search({ imdbid: 'tt2975590'})
-    console.log(res)
+async function search() {
+    axios.get('https://yts.megaproxy.info/api/v2/list_movies.json?page=1&query_term=spider%20man')
+    .then(function(data) {
+        let result = data.data.data.movies
+        result.map((movie) => {
+            console.log(movie)
+            console.log("here is: " + movie.title + " and id is: " + movie.imdb_code + " and quality is " + movie.quality)
+            console.log(movie.torrents)
+        })
+    })
+    .catch(function(err) {
+        console.log(err)
+    })
 }
 
-searchSubtitles()
+search()

@@ -117,6 +117,7 @@ function Navbar() {
       query: search,
     })
     .then(function (response) {
+      console.log(response.data)
       history.push({
         pathname: '/home',
         search: '?q=' + search,
