@@ -18,7 +18,7 @@ function Notecard({movie}) {
             <Card elevation={1}>
                 <CardMedia
                     className={classes.media}
-                    image={movie.large_cover_image}
+                    image={movie.image? movie.image : "https://productimages.artboxone.com/826383195-PO-big.jpg"}
                     title={movie.column_2 || movie.title}
                 />
                 <CardContent>

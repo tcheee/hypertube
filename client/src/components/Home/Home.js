@@ -37,11 +37,12 @@ function Home() {
   }
 
   useEffect(() => {
-      fetch('https://retoolapi.dev/pchPTP/data')
+      fetch('http://localhost:5000/api/home')
         .then(res => {
             return res.json()
         })
         .then((data) => {
+            console.log(data)
             setMovies(data)
             setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
         })

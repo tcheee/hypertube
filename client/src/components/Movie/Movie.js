@@ -90,7 +90,7 @@ function Movie() {
                         /> */}
                     <video width='100%' controls crossorigin="anonymous">
                         <source src={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}`} />
-                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}`} default={true} />
+                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}`} />
                     </video>
                 <form>
                     <TextField
