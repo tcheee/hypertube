@@ -4,7 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { googleProvider, githubProvider } from '../../config/authMethods';
+import socialMediaAuth from '../../service/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,7 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function Login() {
+  const handleOnClick = async (provider) => {
+    const res = await socialMediaAuth(provider);
+    console.log(res.credential)
+  }
   const classes = useStyles();
   return (
     <div>
@@ -67,6 +74,7 @@ function Login() {
             >
               Sign In
             </Button>
+           
             <Grid container>
               <Grid item xs>
                 <Link to="/reset-password" variant="body2" style={{ textDecoration: 'none' }}>
@@ -80,6 +88,13 @@ function Login() {
               </Grid>
             </Grid>
           </form>
+          <button onClick={() => handleOnClick(githubProvider)}
+            >
+              Sign in with github
+            </button>
+          <button onClick={() => handleOnClick(googleProvider)}>
+            sign in with google
+          </button>
         </div>
       </Container>
     </div>
