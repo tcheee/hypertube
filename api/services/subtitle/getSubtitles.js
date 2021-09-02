@@ -4,9 +4,14 @@ const fs = require('fs');
 const path = require('path');
 const appDir = path.dirname(require.main.filename);
 
-const downdloadSubtitles = (id) => {
+const getSubtitles = (id, extension) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const pathName = appDir + '/tmp/subtitles/' + id + "-" + extension + ".vtt";
+            if (fs.existsSync(pathName)) {
+                resolve(pathName);
+            }
+
             OpenSubtitles = new OS({
                 useragent: 'TemporaryUserAgent',
                 username: 'tche42Api',
@@ -14,11 +19,9 @@ const downdloadSubtitles = (id) => {
                 ssl: false
             })
             const result = await OpenSubtitles.search({ imdbid: id })
-            console.log(result)
-            if (result.en) {
-                if(result.en.vtt) {
-                    const pathName = appDir + '/tmp/subtitles/' + id + ".vtt"
-                    fs.writeFileSync(pathName, await download(result.en.vtt));
+            if (result[extension]) {
+                if(result[extension].vtt) {
+                    fs.writeFileSync(pathName, await download(result[extension].vtt));
                     resolve(pathName)
                 }
             }
@@ -30,4 +33,4 @@ const downdloadSubtitles = (id) => {
     })
 }
 
-module.exports = downdloadSubtitles;
+module.exports = getSubtitles;

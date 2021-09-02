@@ -27,7 +27,11 @@ function Movie() {
     const [comments, setComments] = useState(null)
     const [magnet, setMagnet] = useState(null)
     const [playing, setPlaying] = useState(false)
+    const [launchDownload, setLaunchDownload] = useState(false);
+    const [downloading, setDownloading] = useState(false);
     const location = useLocation();
+    const tracks = [];
+    const variable = 'test'
 
     if (location.state && magnet == null) {
         console.log(location.state)
@@ -48,6 +52,11 @@ function Movie() {
     function handleSubmit(event) {
         event.preventDefault()
         console.log(magnet)
+        tracks.push({
+            kind: 'subtitles',
+            src: `http://localhost:5000/api/subtitles/${location.state.id}`,
+            srcLang: 'en'
+        })
 
         axios.post('http://localhost:5000/api/stream', {
             magnet: magnet,
@@ -60,6 +69,14 @@ function Movie() {
         });
     }
 
+    function handleClick() {
+        if (!launchDownload) {
+            setLaunchDownload(true);
+            setDownloading(true);
+            axios.post(`http://localhost:5000/api/download/${location.state.torrents[0].hash}`)
+        }
+    }
+
     return (
             <Grid container 
                 spacing={0}
@@ -68,30 +85,18 @@ function Movie() {
                 justifyContent="center"
             >
                 <div> 
+                    <div>
                     <h2 className={classes.title}> Movie Title for {id} </h2>
-                    {/* <ReactPlayer
-                        className='movie-video'
-                        config={ {
-                            file: {
-                                attributes: {
-                                    crossOrigin: 'anonymous'
-                                },
-                                tracks: [
-                                    { kind: 'subtitles', src: {`http://localhost:5000/api/subtitles/${location.state.id}`}  , srcLang: 'en', default: true},
-                                ]
-                            },
-                            showSpinner: true
-                        } }
-                        controls
-                        onPlay={ () => { setPlaying(true) } }
-                        playing
-                        url={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}` }
-                        width={ '100%' }
-                        /> */}
-                    <video width='100%' controls crossorigin="anonymous">
+                    <video width='100%' controls  crossOrigin="anonymous">
                         <source src={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}`} />
-                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}`} />
+                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                        <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                        <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
                     </video>
+                    {downloading && 
+                        <p> Currently downloading the movie ...</p>
+                    }
+                    </div>
                 <form>
                     <TextField
                     id="standard-full-width"

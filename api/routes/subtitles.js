@@ -1,13 +1,15 @@
 var express = require('express')
 var router = express.Router()
 const fs = require('fs');
-const downdloadSubtitles = require('../services/subtitle/downloadSubtitles')
+const getSubtitles = require('../services/subtitle/getSubtitles')
+const getExtension = require('../services/subtitle/getExtension')
 
 router.get("/api/subtitles/:id", async (req, res) => {
-    console.log('lets download subtitles')
-    const pathName = await downdloadSubtitles(req.params.id)
+    const [id, extension] = await getExtension(req.params.id);
+    console.log(id, extension);
+    const pathName = await getSubtitles(id, extension);
     res.setHeader('Content-Type', 'text/vtt')
     res.send(fs.readFileSync(pathName).toString())
   })
   
-  module.exports = router;
+module.exports = router;

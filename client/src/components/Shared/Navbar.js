@@ -22,12 +22,15 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: 'none',
+    color: "#E50914",
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
   },
   search: {
     position: 'relative',
+    flexGrow: 1,
+    align: "center",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
@@ -35,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 100,
-    width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto',
@@ -113,7 +115,7 @@ function Navbar() {
   const handleSearch = (event) => {
     event.preventDefault();
     console.log(search)
-    axios.post('http://localhost:5000/api/search', {
+    axios.post('http://localhost:5000/api/movie/search', {
       query: search,
     })
     .then(function (response) {
@@ -192,7 +194,7 @@ function Navbar() {
         <Toolbar>
           <Link to="/home" style={{ textDecoration: 'none', color: '#FFF'  }}>
             <Typography className={classes.title} variant="h6" noWrap>
-            📺 Hypertube
+            🍿 Hypertube
             </Typography>
           </Link>
           {auth && (<div className={classes.search}>

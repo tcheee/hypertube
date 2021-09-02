@@ -37,7 +37,8 @@ function Home() {
   }
 
   useEffect(() => {
-      fetch('http://localhost:5000/api/home')
+    if (!location.search) { 
+      fetch('http://localhost:5000/api/movie/home')
         .then(res => {
             return res.json()
         })
@@ -46,6 +47,7 @@ function Home() {
             setMovies(data)
             setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
         })
+      }
   }, [])
 
   const handlePagination = (event, value) => {
