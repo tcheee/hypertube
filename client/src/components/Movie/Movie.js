@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { Link, useLocation } from "react-router-dom"
 import axios from 'axios'
 
@@ -25,16 +27,27 @@ function Movie() {
     const classes = useStyles();
     let { id } = useParams()
     const [comments, setComments] = useState(null)
+    const [title, setTitle] = useState(null)
     const [magnet, setMagnet] = useState(null)
     const [playing, setPlaying] = useState(false)
     const [launchDownload, setLaunchDownload] = useState(false);
     const [downloading, setDownloading] = useState(false);
+    const [resolution, setResolution] = useState('720p')
+    const [hash, setHash] = useState(null)
     const location = useLocation();
     const tracks = [];
     const variable = 'test'
 
     if (location.state && magnet == null) {
+        setTitle(location.state.name)
         console.log(location.state)
+        console.log(location.state.torrents)
+        const torrents = location.state.torrents
+        torrents.map(torrent => {
+            if (torrent.quality === resolution) {
+                setHash(torrent.hash);
+            }
+        })
         setMagnet(location.state)
     }
 
@@ -49,32 +62,14 @@ function Movie() {
           })
     }, [])
 
-    function handleSubmit(event) {
-        event.preventDefault()
-        console.log(magnet)
-        tracks.push({
-            kind: 'subtitles',
-            src: `http://localhost:5000/api/subtitles/${location.state.id}`,
-            srcLang: 'en'
+    const handleClick = () => {
+        setResolution('1080p');
+        const torrents = location.state.torrents
+        torrents.map(torrent => {
+            if (torrent.quality === resolution) {
+                setHash(torrent.hash);
+            }
         })
-
-        axios.post('http://localhost:5000/api/stream', {
-            magnet: magnet,
-        })
-        .then(function (response) {
-            console.log(response)
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-
-    function handleClick() {
-        if (!launchDownload) {
-            setLaunchDownload(true);
-            setDownloading(true);
-            axios.post(`http://localhost:5000/api/download/${location.state.torrents[0].hash}`)
-        }
     }
 
     return (
@@ -86,16 +81,20 @@ function Movie() {
             >
                 <div> 
                     <div>
-                    <h2 className={classes.title}> Movie Title for {id} </h2>
-                    <video width='100%' controls  crossOrigin="anonymous">
-                        <source src={`http://localhost:5000/api/stream/${location.state.torrents[0].hash}`} />
+                    <h2 className={classes.title}> {title} </h2>
+                    <button onClick={handleClick}> Change Resolution </button>
+                    { resolution === "720p" && <video width='100%' controls  crossOrigin="anonymous">
+                        <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
                         <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
                         <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
                         <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                    </video>
-                    {downloading && 
-                        <p> Currently downloading the movie ...</p>
-                    }
+                    </video>}
+                    { resolution === "1080p" && <video width='100%' controls  crossOrigin="anonymous">
+                        <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                        <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                        <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                    </video>}
                     </div>
                 <form>
                     <TextField

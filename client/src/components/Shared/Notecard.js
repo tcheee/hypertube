@@ -5,16 +5,46 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+    hover: {
+        alignItems: "center",
+        position:'relative',
+        '&:hover': {
+            "& $opacity": {
+                objectFit: 'cover',
+                opacity: 0.2,
+                backgroundColor: "black",
+              },
+            "& $overlay": {
+                display: "block",
+              },
+            // "& $media": {
+            //     objectFit: 'cover',
+            //     opacity: 0.4,
+            //   }
+            },
+    },
+    opacity: {
+    },
     media: {
       height: 250,
       paddingTop: '56.25%', // 16:9
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        margin:'auto',
+        color: "white",
+        display:'none',
+    },
   }));
 
 function Notecard({movie}) {
     const classes = useStyles();
     return ( 
-        <div>
+        <div className={classes.hover}>
+            <div className={classes.overlay}>
+                {movie.summary}
+            </div>
+        <div className={classes.opacity}>
             <Card elevation={1}>
                 <CardMedia
                     className={classes.media}
@@ -27,6 +57,7 @@ function Notecard({movie}) {
                     </Typography>
                 </CardContent>
             </Card>
+        </div>
         </div>
     )
 }

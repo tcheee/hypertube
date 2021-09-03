@@ -93,7 +93,6 @@ async function handleStreaming(req, res) {
 
   streaming_engine.on('idle', () => {
     console.log('Movie download, I will disappear!')
-    console.log(Pieces); 
     console.log("Completed : " + (parseInt(pieces.length, 10) / parseInt(numPieces, 10) * 100 + "%"));
     // when near to 100%, store in db that the movie was downloaded with: idmb + resolution 
 
