@@ -4,16 +4,16 @@ services:
         image: postgres
         restart: always
         environment: 
-            - DATABASE_HOST=127.0.0.1
-            - POSTGRES_USER=root
-            - POSTGRES_PASSWORD=root
+            # - POSTGRES_USER=root
+            # - POSTGRES_PASSWORD=root
             - POSTGRES_DB=hypertube
+            - POSTGRES_HOST_AUTH_METHOD=trust
         expose:
             - "5432"
         ports: 
             - "5432:5432"
-        volumes: 
-            - "./database/db/data:/var/lib/postgresql/data"
+        # volumes: 
+        #     - "./database/db/data:/var/lib/postgresql/data"
     client:
         container_name: client
         build:

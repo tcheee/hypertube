@@ -1,4 +1,3 @@
-const axios = require('axios')
 var express = require('express')
 var router = express.Router()
 const getTrendingMovie = require('../services/movie/trendingMovie')

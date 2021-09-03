@@ -8,6 +8,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["aarch64-unknown-linux-musl"]
 }
 
 model User {

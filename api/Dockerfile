@@ -6,6 +6,8 @@ COPY package.json .
 
 RUN npm install
 
+RUN npm i axios
+
 COPY . .
 
-CMD ["npm", "run-script", "start"]
+CMD ["npm", "start"]
