@@ -14,11 +14,23 @@ generator client {
 model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
-  name    String?
+  name    String
+  username String?
+  comments Comment[]
+  image String?
 }
 
-model User2 {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  username   String   @unique
+model Movies {
+  id      Int     @id
+  resolution    String
+  image_link    String
+  isDownload    Boolean
+}
+
+model Comment {
+  id    Int     @id @default(autoincrement())
+  from  User @relation(fields: [fromId], references: [id])
+  fromId Int
+  moviesId  Int
+  comment   String
 }

@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
 import { googleProvider, githubProvider } from '../../config/authMethods';
 import socialMediaAuth from '../../service/auth';
+import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,7 +33,30 @@ const useStyles = makeStyles((theme) => ({
 function Login() {
   const handleOnClick = async (provider) => {
     const res = await socialMediaAuth(provider);
+    if (provider === githubProvider && res){
+      const user = {
+        email : res.email
+      }
+      axios.post(`http://localhost:5000/githubauth`, { user })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+    }
+    if (provider === googleProvider && res){
+      const user = {
+        email : res.user.email,
+        username : res.user.displayName,
+        image : res.user.photoURL
+      }
+      axios.post(`http://localhost:5000/googleauth`, { user })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+    }
     console.log(res.credential)
+    console.log(res)
   }
   const classes = useStyles();
   return (
