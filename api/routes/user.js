@@ -26,6 +26,11 @@ router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
   });
 
+router.post('/hypertubeauth', (req, res) => {
+  if(req.body.user){
+    console.log(req.body.user)
+  }
+})
 router.post('/githubauth', (req, res) => {
   console.log("la")
   if(req.body.user){
