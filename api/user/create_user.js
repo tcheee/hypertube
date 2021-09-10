@@ -17,8 +17,6 @@ async function createUser(user){
 	    lastName : user.lastName,
 	  }
 	})
-	const accesstoken = jwt.sign(x, process.env.ACCESS_TOKEN_SECRET)
-	return accesstoken;
 }
 
 module.exports = createUser;

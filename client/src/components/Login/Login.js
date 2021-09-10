@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -31,6 +33,35 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login() {
+  // Hypertube auth 
+  const [email, setEmail] = useState('');
+  const [passwords, setPassword] = useState('')
+  const onInputChangeEmail = (event) => {
+    setEmail(event.target.value);
+   }
+   const onInputChangePassword = (event) => {
+    setPassword(event.target.value);
+   }
+   // Submit Form
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const user = {
+      email : email,
+      password : passwords,
+    }
+    axios.post(`http://localhost:5000/login`, { user })
+    .then(res => {
+      console.log(res);
+      localStorage.setItem('accessToken', res.data.accesstoken)
+    })
+    .catch( error => {
+      console.log(error.response)
+    }
+
+    )
+  }
+
+  // github and google auth 
   const handleOnClick = async (provider) => {
     const res = await socialMediaAuth(provider);
     if (provider === githubProvider && res){
@@ -66,7 +97,7 @@ function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={onSubmit} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -76,6 +107,8 @@ function Login() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              type="email"
+              onChange={onInputChangeEmail}
               autoFocus
             />
             <TextField
@@ -88,6 +121,8 @@ function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              type="passwords"
+              onChange={onInputChangePassword}
             />
             <Button
               type="submit"
