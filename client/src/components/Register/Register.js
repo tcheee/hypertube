@@ -8,8 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-
+import Alert from '@material-ui/lab/Alert';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -29,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
 
 function Register() {
   const classes = useStyles();
@@ -65,12 +65,12 @@ function Register() {
       lastName : lastName,
       userName : userName,
       email : email,
-      passwords : passwords,
+      password : passwords,
     }
     axios.post(`http://localhost:5000/hypertubeauth`, { user })
     .then(res => {
       console.log(res);
-      console.log(res.data);
+      // ADD ALERT MESSAGE 
     })
 
   }
