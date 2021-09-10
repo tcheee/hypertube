@@ -60,11 +60,6 @@ function Register() {
    // Submit Form
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(firstName);
-    console.log(lastName);
-    console.log(userName);
-    console.log(email);
-    console.log(passwords);
     const user = {
       firstName : firstName,
       lastName : lastName,
