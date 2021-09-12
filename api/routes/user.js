@@ -4,25 +4,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const createUser = require('../user/create_user.js')
 const loginUser = require('../user/login_user')
+const getOrCreateGoogle = require('../user/get_or_create_user')
+const getOrCreateGithub = require('../user/get_or_create_user')
 
-const getOrCreateGithub = async (email) => {
-  console.log(email)
-//  await prisma.user.upsert({
-//    where: { email: email },
-//    update: {},
-//    create: { email: email },
-//  })
-}
-const getOrCreateGoogle = async (email, username, image) => {
-  console.log(email)
-  console.log(username)
-  console.log(image)
-  //  await prisma.user.upsert({
-//    where: { email: email },
-//    update: {},
-//    create: { email: email, username : username, image : image },
-//  })
-}
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
   });
