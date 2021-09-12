@@ -75,10 +75,12 @@ function Login() {
       })
     }
     if (provider === googleProvider && res){
+      console.log(res)
       const user = {
         email : res.user.email,
         username : res.user.displayName,
-        image : res.user.photoURL
+        image : res.user.photoURL,
+        token : res.credential.idToken
       }
       axios.post(`http://localhost:5000/googleauth`, { user })
       .then(res => {

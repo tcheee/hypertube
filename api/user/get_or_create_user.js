@@ -1,7 +1,6 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 
-
 const getOrCreateGoogle = async (email, username, image) => {
 	  await prisma.user.upsert({
           where: { email: email },

@@ -1,11 +1,11 @@
 var express = require('express')
 var router = express.Router()
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const createUser = require('../user/create_user.js')
 const loginUser = require('../user/login_user')
 const getOrCreateGoogle = require('../user/get_or_create_user')
 const getOrCreateGithub = require('../user/get_or_create_user')
+const checkToken = require('../auth/check-token')
+
 
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
@@ -54,16 +54,25 @@ router.post('/hypertubeauth', async (req, res) => {
 
 router.post('/githubauth', (req, res) => {
   console.log("la")
+
   if(req.body.user){
     getOrCreateGithub(req.body.user.email)
   }
 })
 
-router.post('/googleauth', (req, res) => {
-  console.log("la")
-  if(req.body.user){
+router.post('/googleauth', async (req, res) => {
+  const tokenIsValid = await checkToken(req.body.user.token, "google", req.body.user.email)
+  if(tokenIsValid){
+    console.log(req.body)
     getOrCreateGoogle(req.body.user.email, req.body.user.username, req.body.user.image)
-  }
+    return res.send({
+      message: "User Successfully Login",
+    });
+}
+else 
+  return res.status(401).send({
+    message: "Token is not valid"
+  })
 })
 
 

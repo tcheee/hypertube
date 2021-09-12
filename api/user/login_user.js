@@ -4,7 +4,6 @@ const saltRounds = 10;
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 const jwt = require("jsonwebtoken");
-const { use } = require('../routes/user');
 
 async function loginUser(user){
 	const userDb = await prisma.user.findUnique({
