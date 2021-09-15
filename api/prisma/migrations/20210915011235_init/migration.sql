@@ -13,10 +13,11 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Movies" (
-    "id" INTEGER NOT NULL,
-    "resolution" TEXT NOT NULL,
-    "image_link" TEXT NOT NULL,
-    "isDownload" BOOLEAN NOT NULL,
+    "id" SERIAL NOT NULL,
+    "movieId" INTEGER NOT NULL,
+    "resolution" TEXT,
+    "image_link" TEXT,
+    "isDownload" BOOLEAN,
 
     PRIMARY KEY ("id")
 );

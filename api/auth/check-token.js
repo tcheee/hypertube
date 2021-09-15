@@ -15,8 +15,9 @@ const checkToken = async (token, provider, email) => {
 	  return false
 	})
 	}
+	// WIP 
 	if (provider === "github"){
-
+		return true
 	}
 }
 

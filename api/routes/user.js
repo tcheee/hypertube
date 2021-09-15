@@ -5,7 +5,8 @@ const loginUser = require('../user/login_user')
 const getOrCreateGoogle = require('../user/get_or_create_user')
 const getOrCreateGithub = require('../user/get_or_create_user')
 const checkToken = require('../auth/check-token')
-
+const getAllUser = require('../user/get_user')
+const getUser = require('../user/get_user')
 
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
@@ -72,6 +73,26 @@ router.post('/googleauth', async (req, res) => {
 else 
   return res.status(401).send({
     message: "Token is not valid"
+  })
+})
+
+router.get('/users', async (req, res) => {
+  const users = await getAllUser()
+  return res.send({
+    users : users
+  })
+})
+
+router.get('/usersId', async (req, res) => {
+  if(req.body.id){
+    const user = await getUser(req.body.id)
+    return res.send({
+      user : user
+    })
+  }
+  else 
+  return res.status(401).send({
+    message: "We must have an Id"
   })
 })
 

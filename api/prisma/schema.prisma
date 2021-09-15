@@ -22,10 +22,11 @@ model User {
 }
 
 model Movies {
-  id      Int     @id
-  resolution    String
-  image_link    String
-  isDownload    Boolean
+  id      Int     @id @default(autoincrement())
+  movieId   Int   
+  resolution    String?
+  image_link    String?
+  isDownload    Boolean?
 }
 
 model Comment {
