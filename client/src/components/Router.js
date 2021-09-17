@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom"
 import Navbar from "./Shared/Navbar"
 import Login from "./Login/Login.js"
 import Register from "./Register/Register"
@@ -6,31 +6,56 @@ import Forget from "./Forget/Forget"
 import Home from "./Home/Home"
 import Movie from "./Movie/Movie"
 import Profile from "./Profile/Profile"
+import isAuth from "../service/decodeToken"
+import Store from '../context/store'
+
+  function PrivateRoute({ children, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) => (isAuth() ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        ))}
+      />
+    );
+  }
 
 function App() {
     return (
         <Router>
-            <Navbar />
-            <Switch>
-                <Route exact path="/"> 
-                    <Login />
-                </Route>
-                <Route path="/home">
-                    <Home />
-                </Route>
-                <Route path="/register">
-                    <Register />
-                </Route>
-                <Route path="/reset-password">
-                    <Forget />
-                </Route>
-                <Route path="/profile/:username">
-                    <Profile />
-                </Route>
-                <Route path="/movie/:id">
-                    <Movie />
-                </Route>
-            </Switch>
+            <Store>
+                <Navbar />
+                <Switch>
+                    <Route exact path="/login"> 
+                        <Login />
+                    </Route>
+                    <Route path="/register">
+                        <Register />
+                    </Route>
+                    <Route path="/reset-password">
+                        <Forget />
+                    </Route>
+                    <PrivateRoute exact path="/">
+                        <Home />
+                    </PrivateRoute>
+                    <PrivateRoute path="/home">
+                        <Home />
+                    </PrivateRoute>
+                    <PrivateRoute path="/profile/:id">
+                        <Profile />
+                    </PrivateRoute>
+                    <PrivateRoute path="/movie/:id">
+                        <Movie />
+                    </PrivateRoute>
+                </Switch>
+            </Store>
         </Router>
     )
 }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useState, useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,8 @@ import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
 import { googleProvider, githubProvider } from '../../config/authMethods';
 import socialMediaAuth from '../../service/auth';
+import {Context} from '../../context/store'
+import isAuth from "../../service/decodeToken"
 import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +38,9 @@ function Login() {
   // Hypertube auth 
   const [email, setEmail] = useState('');
   const [passwords, setPassword] = useState('')
+  const [state, dispatch] = useContext(Context);
+  const history = useHistory();
+
   const onInputChangeEmail = (event) => {
     setEmail(event.target.value);
    }
@@ -51,8 +56,13 @@ function Login() {
     }
     axios.post(`http://localhost:5000/login`, { user })
     .then(res => {
-      console.log(res);
-      localStorage.setItem('accessToken', res.data.accesstoken)
+      console.log(res.data);
+      if (res.data.result) {
+        localStorage.setItem('accessToken', res.data.accesstoken);
+        console.log('user created');
+        dispatch({type: 'SET_USER', payload: isAuth()});
+        history.push("/home");
+      }
     })
     .catch( error => {
       console.log(error.response)
@@ -123,7 +133,6 @@ function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-              type="passwords"
               onChange={onInputChangePassword}
             />
             <Button

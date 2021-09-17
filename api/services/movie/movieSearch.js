@@ -15,7 +15,7 @@ function movieSearch(search) {
             resolve(modifiedData)
         }
         else {
-            resolve({msg: 'we did not find anything'})
+            resolve({error: true, msg: 'we did not find anything'})
         }
         })
         .catch(function(err) {

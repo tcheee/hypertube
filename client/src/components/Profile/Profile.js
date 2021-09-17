@@ -5,7 +5,10 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useParams} from "react-router-dom"
-import {useState} from "react"
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { useDropzone } from 'react-dropzone';
+import {Context} from '../../context/store'
+import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,20 +31,39 @@ const useStyles = makeStyles((theme) => ({
   large:{
     width: theme.spacing(20),
     height: theme.spacing(20),
+    cursor: 'pointer',
   }
 }));
 
 function Profile() {
   const classes = useStyles();
-  let { username } = useParams()
-  const [self, setSelf] = useState(false)
+  const [state, dispatch] = useContext(Context);
+  let { id } = useParams()
+  const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    if (parseInt(id,10) === parseInt(state.user.id)) {
+      setEditable(true);
+    }
+  }, [state])
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    console.log(acceptedFiles);
+    axios.post(`http://localhost:5000/user/image`, { 
+      image: acceptedFiles 
+    })
+  }, []);
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
   
 
   return (
-    <div className={classes.full}>
+    <div>
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
-        <Avatar alt="Remy Sharp" src="https://via.placeholder.com/100" className={classes.large}/>
+          <div {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <Avatar alt="Remy Sharp" src="https://via.placeholder.com/100" className={classes.large}/>
+          </div>
           <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -54,6 +76,7 @@ function Profile() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                disabled={!editable}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -65,6 +88,7 @@ function Profile() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                disabled={!editable}
               />
             </Grid>
             <Grid item xs={12}>
@@ -76,9 +100,10 @@ function Profile() {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                disabled={!editable}
               />
             </Grid>
-            <Grid item xs={12}>
+            {editable && <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -88,8 +113,8 @@ function Profile() {
                 name="email"
                 autoComplete="email"
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Grid>}
+            {editable && <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -99,10 +124,11 @@ function Profile() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                disabled={!editable}
               />
-            </Grid>
+            </Grid>}
           </Grid>
-            {self && <Button
+            {editable && <Button
               type="submit"
               fullWidth
               variant="contained"

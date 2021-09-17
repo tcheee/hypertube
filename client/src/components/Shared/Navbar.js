@@ -12,9 +12,11 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import {useState} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import {useHistory, Link} from 'react-router-dom' 
 import axios from 'axios'
+import {Context} from '../../context/store'
+import isAuth from "../../service/decodeToken"
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -29,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     position: 'relative',
-    flexGrow: 1,
     align: "center",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -82,13 +83,26 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   const classes = useStyles();
   const history = useHistory();
-  const [auth, setAuth] = useState(true);
-  const [search, setSearch] = useState(null);
+  const [state, dispatch] = useContext(Context);
+  const [auth, setAuth] = useState(false);
+  const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  useEffect(() => {
+    dispatch({type: 'SET_USER', payload: isAuth()});
+  }, []);
+
+  useEffect(() => {
+    if (state.user.id) {
+      setAuth(true);
+    }
+    else {
+      setAuth(false);
+    }
+  }, [state])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,36 +128,56 @@ function Navbar() {
 
   const handleSearch = (event) => {
     event.preventDefault();
-    console.log(search)
+    event.target.value = '';
+    dispatch({type: 'START_LOADING'});
     axios.post('http://localhost:5000/api/movie/search', {
       query: search,
     })
     .then(function (response) {
       console.log(response.data)
+      console.log(state.loading)
+      dispatch({type: 'STOP_LOADING'});
       history.push({
         pathname: '/home',
         search: '?q=' + search,
         state: { result: response.data }
       })
+      setSearch('')
     })
     .catch(function (error) {
       console.log(error);
     });
   }
 
+  if (state.error) {
+    console.log("There was an error while getting the state")
+  }
+
+  const handleClickAccount = () => {
+    handleMenuClose()
+    history.push(`/profile/${state.user.id}`)
+  }
+
+  const handleClickLogout = () => {
+    handleMenuClose()
+    dispatch({type: 'DELETE_USER'});
+    localStorage.removeItem('accessToken');
+    history.push(`/login`)
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+      >
+      <MenuItem onClick={handleClickAccount}>My Account</MenuItem>
+      <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -210,6 +244,7 @@ function Navbar() {
               }}
               inputProps={{ 'aria-label': 'search' }}
               onChange={handleTyping}
+              value = {search}
             />
             </form>
           </div>)}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios"
-
+import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
@@ -39,6 +39,7 @@ function Register() {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [passwords, setPassword] = useState('');
+  const history = useHistory();
 
 // take input change value and store in State
   const onInputChangeFirstName = (event) => {
@@ -70,6 +71,10 @@ function Register() {
     axios.post(`http://localhost:5000/hypertubeauth`, { user })
     .then(res => {
       console.log(res);
+      if (res.data.result) {
+        console.log('user created');
+        history.push("/");
+      }
       // ADD ALERT MESSAGE 
     })
 
@@ -149,7 +154,6 @@ function Register() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                type="passwords"
                 onChange={onInputChangePassword}
               />
             </Grid>

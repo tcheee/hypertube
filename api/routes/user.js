@@ -8,6 +8,7 @@ const checkToken = require('../services/auth/check-token')
 const getAllUser = require('../services/user/get_user')
 const getUser = require('../services/user/get_user')
 
+
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
   });
@@ -19,6 +20,7 @@ router.post('/login', async (req, res) => {
     console.log(result)
     if(result != "-1"){
       return res.send({
+        result: true,
         message: "User Successfully login",
         accesstoken: result
       })
@@ -43,6 +45,7 @@ router.post('/hypertubeauth', async (req, res) => {
     // Call Create User fonction
     await createUser(req.body.user)
     return res.send({
+      result: true,
       message: "User Successfully created",
    //   accessToken: accesstoken
     });
@@ -94,6 +97,15 @@ router.get('/usersId', async (req, res) => {
   return res.status(401).send({
     message: "We must have an Id"
   })
+})
+
+router.post('/user/image', async (req, res) => {
+  console.log(req.body)
+  return (true);
+  // const users = await getAllUser()
+  // return res.send({
+  //   users : users
+  // })
 })
 
 

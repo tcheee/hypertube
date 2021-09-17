@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -26,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Change() {
   const classes = useStyles();
+
   return (
-    <div className={classes.full}>
+    <div>
   `    <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">

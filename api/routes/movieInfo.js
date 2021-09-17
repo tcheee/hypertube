@@ -3,7 +3,7 @@ var router = express.Router()
 const getTrendingMovie = require('../services/movie/trendingMovie')
 const getMovieSearch = require('../services/movie/movieSearch')
   
-router.get("/api/movie/home", async (req, res) => {
+router.get("/api/movie/trending", async (req, res) => {
     const result = await getTrendingMovie();
     res.json(result)
     });
