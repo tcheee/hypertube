@@ -1,12 +1,12 @@
 var express = require('express')
 var router = express.Router()
-const createUser = require('../user/create_user.js')
-const loginUser = require('../user/login_user')
-const getOrCreateGoogle = require('../user/get_or_create_user')
-const getOrCreateGithub = require('../user/get_or_create_user')
-const checkToken = require('../auth/check-token')
-const getAllUser = require('../user/get_user')
-const getUser = require('../user/get_user')
+const createUser = require('../services/user/create_user.js')
+const loginUser = require('../services/user/login_user')
+const getOrCreateGoogle = require('../services/user/get_or_create_user')
+const getOrCreateGithub = require('../services/user/get_or_create_user')
+const checkToken = require('../services/auth/check-token')
+const getAllUser = require('../services/user/get_user')
+const getUser = require('../services/user/get_user')
 
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
