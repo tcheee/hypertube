@@ -5,6 +5,7 @@ const userRouter = require('./routes/user');
 const streamingRouter = require('./routes/movieStreaming');
 const subtitlesRouter = require('./routes/subtitles');
 const commentRouter = require('./routes/comment');
+const scheduleDeletion = require('./subscribers/cronDeleteMovie')
 
 //Define const variable that are going to be used below
 const app = express()
@@ -21,6 +22,8 @@ app.use(movieInfoRouter);
 app.use(commentRouter);
 app.use(streamingRouter);
 app.use(subtitlesRouter);
+
+scheduleDeletion();
 
 // Connecting the server to the port
 httpServer.listen(port, () => {

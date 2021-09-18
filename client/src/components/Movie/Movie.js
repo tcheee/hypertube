@@ -1,3 +1,5 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import {useParams} from "react-router-dom"
 import {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Box from '@mui/material/Box';
 import { Link, useLocation } from "react-router-dom"
 import axios from 'axios'
 
@@ -22,6 +25,39 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2)
     }
   }));
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
 function Movie() {
     const classes = useStyles();
@@ -37,6 +73,11 @@ function Movie() {
     const location = useLocation();
     const tracks = [];
     const variable = 'test'
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
 
     if (location.state && magnet == null) {
         setTitle(location.state.name)
@@ -82,19 +123,30 @@ function Movie() {
                 <div> 
                     <div>
                     <h2 className={classes.title}> {title} </h2>
-                    <button onClick={handleClick}> Change Resolution </button>
-                    { resolution === "720p" && <video width='100%' controls  crossOrigin="anonymous">
-                        <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                        <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                        <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                    </video>}
-                    { resolution === "1080p" && <video width='100%' controls  crossOrigin="anonymous">
-                        <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                        <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                        <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                        <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                    </video>}
+                    <Box sx={{ width: '100%' }}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="tabs" centered>
+                            <Tab label="720p" {...a11yProps(0)} />
+                            <Tab label="1080p" {...a11yProps(1)} />
+                        </Tabs>
+                        </Box>
+                        <TabPanel value={value} index={0}>
+                        <video width='100%' controls  crossOrigin="anonymous">
+                            <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                            <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                            <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                            <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                        </video>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                        <video width='100%' controls  crossOrigin="anonymous">
+                            <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                            <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                            <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                            <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                        </video>
+                        </TabPanel>
+                    </Box>
                     </div>
                 <form>
                     <TextField

@@ -1,22 +1,41 @@
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Container from '@material-ui/core/Container';
 import Notecard from '../Shared/Notecard'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
 import Pagination from '@material-ui/lab/Pagination';
+import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom"
 import Loader from 'react-loader';
 import {Context} from '../../context/store'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      
         '& > * + *': {
           marginTop: theme.spacing(2),
         },
         display: 'flex',
         alignItems:'center'
       },
+    modal: {
+        position: 'absolute',
+        top: '50px',
+        left: '50px',
+        transform: 'translate(-50%, -50%)',
+        width: '400',
+        bgcolor: 'background.paper',
+        color: 'white',
+        border: '2px solid #000',
+        boxShadow: '24px',
+        p: '4px',
+    },
+    button: {
+      marginBottom: '8px', 
+      color: '#E50914'
+    }
   }));
 
 
@@ -29,6 +48,10 @@ function Home() {
   const [error, setError] = useState(false)
   const [activePage, setActivePage] = useState(1) 
   const location = useLocation();
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (!location.search) { 
@@ -63,10 +86,32 @@ function Home() {
     setActivePage(value);
   };
 
+  const handleScroll = (e) => {
+    console.log('here')
+    console.log(e.target)
+    console.log(e.target.scrollTop)
+  }
+
   return (
-    <Container>
-        <p> Hello 📺</p>
-            <Grid container spacing={4}>
+    <div onScroll={(e) => handleScroll(e)}>
+    <Container >
+          <Button onClick={handleOpen} styles={classes.button}> 📺 Preferences </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={classes.modal}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Text in a modal
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              </Typography>
+            </Box>
+          </Modal>
+            <Grid container spacing={4} onScroll={(e) => handleScroll(e)}>
                 {state.loading &&
                   <Loader
                   lines={13} 
@@ -101,11 +146,12 @@ function Home() {
                 )))}
             </Grid>
             <div className={classes.root}>
-            {!state.loading && (movies.length === 0 ? null :
+            {/* {!state.loading && (movies.length === 0 ? null :
             <Pagination count={pages} color="secondary" page={activePage} onChange={handlePagination} align='center'/>
-            )}
-        </div>
+            )} */}
+           </div>
     </Container>
+    </div>
   );
 }
 

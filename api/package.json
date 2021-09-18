@@ -25,6 +25,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "google-auth-library": "^7.9.1",
     "jsonwebtoken": "^8.5.1",
+    "node-cron": "^3.0.0",
     "nodemon": "^2.0.12",
     "opensubtitles-api": "^5.1.2",
     "torrent-stream": "^1.2.1"

@@ -52,7 +52,7 @@ async function launchStreaming(engine, file, range, res) {
     })
 
     console.log('here')
-    downdloadMovie(pipeDownload, file, start);
+    downdloadMovie(pipeDownload, file);
 
     pipeStream.pipe(res)
 }
@@ -95,7 +95,7 @@ async function handleStreaming(req, res) {
     console.log('Movie should be downloaded, I will disappear!')
     console.log("Completed : " + (parseInt(pieces.length, 10) / parseInt(numPieces, 10) * 100 + "%"));
     if (parseInt(pieces.length, 10) / parseInt(numPieces, 10) === 1 || parseInt(pieces.length, 10) / parseInt(numPieces, 10) > 0.95) {
-      // put in the db that the movie is fully donwload + imdb = resolution
+      // put in the db that the movie is fully donwload + imdb
     }
     // when near to 100%, store in db that the movie was downloaded with: idmb + resolution 
 
