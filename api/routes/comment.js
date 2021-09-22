@@ -26,10 +26,48 @@ router.get('/commentsId', async (req, res) => {
     })
   }
   else 
-  return res.status(401).send({
+    return res.status(401).send({
     message: "We must have an Id"
   })
 })
+
+router.post('/commentsAdd', async (req, res) => {
+  if(req.body.comments){
+    await prisma.comment.create({
+      data : 
+      {
+        moviesId : req.body.comments.moviesId,
+        comment: req.body.comments.comment,
+        fromId: req.body.comments.fromId,
+      }      
+    })
+    return res.send({
+      message: "comment Created"
+    })
+  }
+  else
+    return res.status(401).send({
+      message: "Something bad happened, Please try again"
+    })
+})
+
+router.get('/getCommentsMovie', async (req, res) => {
+  if (req.body.movieId){
+    comments = await prisma.comments.findMany({
+      where : {
+        moviesId : req.body.movieId
+      }
+    })
+    return res.send({
+      comments: comments
+    })
+  }
+  else
+    return res.status(401).send({
+      message: "Something bad happened, Please try again"
+    })
+  })
+
 
 router.delete('/commentsId', async (req, res) => {
   if(req.body.id){
@@ -45,7 +83,7 @@ router.delete('/commentsId', async (req, res) => {
     })
   }
   else 
-  return res.status(401).send({
+    return res.status(401).send({
     message: "We must have an Id"
   })
 })

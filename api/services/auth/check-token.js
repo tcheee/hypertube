@@ -1,5 +1,6 @@
 const axios = require('axios')
 
+// Remove email
 const checkToken = async (token, provider, email) => {
 	if (provider === "google"){
 	axios.post('https://oauth2.googleapis.com/tokeninfo?id_token=' + token)

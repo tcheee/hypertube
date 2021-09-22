@@ -20,7 +20,7 @@ async function loginUser(user){
 			}
 			if (res) {
 			const accesstoken = jwt.sign(userDb, process.env.ACCESS_TOKEN_SECRET)
-			resolve(accesstoken);
+			resolve([accesstoken, userDb]);
 			  // Send JWT
 			} else {
 			  // response is OutgoingMessage object that server response http request

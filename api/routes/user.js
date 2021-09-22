@@ -7,6 +7,8 @@ const getOrCreateGithub = require('../services/user/get_or_create_user')
 const checkToken = require('../services/auth/check-token')
 const getAllUser = require('../services/user/get_user')
 const getUser = require('../services/user/get_user')
+const resetPassword = require('../services/user/reset_password')
+const updateUser = require('../services/user/update_user')
 
 
 router.get('/', (req, res) => {
@@ -22,7 +24,8 @@ router.post('/login', async (req, res) => {
       return res.send({
         result: true,
         message: "User Successfully login",
-        accesstoken: result
+        accesstoken: result[0],
+        user: result[1]
       })
     }
     else{
@@ -94,7 +97,7 @@ router.get('/usersId', async (req, res) => {
     })
   }
   else 
-  return res.status(401).send({
+    return res.status(401).send({
     message: "We must have an Id"
   })
 })
@@ -106,6 +109,32 @@ router.post('/user/image', async (req, res) => {
   // return res.send({
   //   users : users
   // })
+})
+router.post('/resetpassword', async (req, res) => {
+  if(req.body.id && req.body.password){
+    await resetPassword(req.body.id, req.body.password)
+    return res.send({
+      message : "Password successfully reset"
+    })
+  }
+  else 
+    return res.status(401).send({
+    message: "We must have an Id & Password"
+  })
+})
+
+router.patch('/updateUser', async (req, res) => {
+  if(req.body.user){
+      userUpdate = await updateUser(req.body.user)
+      return res.send({
+        message: "User successfully patch",
+        user: userUpdate
+      })
+  }
+  else 
+    return res.status(401).send({
+    message: "We must have a User"
+  })
 })
 
 
