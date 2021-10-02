@@ -4,18 +4,23 @@ const nodemailer = require("nodemailer");
 async function send_mail(mail, subject, content) {
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
+    service: 'gmail',
     host: "smtp.gmail.com",
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'victorhypertube@gmail.com', // generated ethereal user
-      pass: 'Jaimelesurf1', // generated ethereal password
+	user: 'matcha42mail@gmail.com', // generated ethereal user
+	pass: 'iksdnipvwheazlcm', // generated ethereal password
     },
+    tls: {
+        rejectUnauthorized: false
+    }
   });
 
   // send mail with defined transport object
+  console.log("GO SEND")
   let info = await transporter.sendMail({
-    from: '"Vic de Hypertube 👻" <victorhypertube@hypertube.com>', // sender address
+    from: '"Vic de Hypertube 👻" <victorhypertube@gmail.com>', // sender address
     to: mail, // list of receivers
     subject: subject, // Subject line
     text: content // plain text body

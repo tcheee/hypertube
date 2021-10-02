@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from "axios"
 import { useHistory } from "react-router-dom";
+import { confirmAlert } from 'react-confirm-alert'; // Import
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +49,16 @@ function Forget() {
       }
     })
     .catch( error => {
-      console.log(error.response)
+      confirmAlert({
+        title: 'Email Incorrect ',
+        message: 'Please try again',
+        buttons: [
+          {
+            label: 'Ok',
+            onClick: () => {}
+          }
+        ]
+      });
     }
     )
   }
