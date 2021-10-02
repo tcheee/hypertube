@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '24px',
         p: '4px',
     },
-    button: {
+    preferences: {
       marginBottom: '8px', 
       color: '#E50914'
     }
@@ -95,21 +95,13 @@ function Home() {
   return (
     <div onScroll={(e) => handleScroll(e)}>
     <Container >
-          <Button onClick={handleOpen} styles={classes.button}> 📺 Preferences </Button>
+          <Button onClick={handleOpen} className={classes.preferences}> 📺 Preferences </Button>
           <Modal
             open={open}
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={classes.modal}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Text in a modal
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
-            </Box>
           </Modal>
             <Grid container spacing={4} onScroll={(e) => handleScroll(e)}>
                 {state.loading &&
