@@ -11,7 +11,8 @@ router.post('/addMovie', async (req, res) => {
 		    movieId : req.body.movie.movieId,
 		    resolution: req.body.movie.resolution,
 		    image_link: req.body.movie.image_link,
-		    lastTimewatch: req.body.movie.lastTimeWatch
+		    lastTimewatch: req.body.movie.lastTimeWatch,
+		    isDownload: req.body.movie.isDownload,
 		  }      
 		})
 		return res.send({
