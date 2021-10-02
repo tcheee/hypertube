@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
 router.post('/login', async (req, res) => {
   console.log("LOGIN TRY")
   if(req.body.user){
+    console.log("pass")
     const result = await loginUser(req.body.user)
     console.log(result)
     if(result != "-1"){
@@ -25,7 +26,8 @@ router.post('/login', async (req, res) => {
         result: true,
         message: "User Successfully login",
         accesstoken: result[0],
-        user: result[1]
+        user: result[1],
+        provider: hypertube,
       })
     }
     else{
@@ -50,7 +52,6 @@ router.post('/hypertubeauth', async (req, res) => {
     return res.send({
       result: true,
       message: "User Successfully created",
-   //   accessToken: accesstoken
     });
   }
   else 
@@ -59,13 +60,6 @@ router.post('/hypertubeauth', async (req, res) => {
     })
 })
 
-router.post('/githubauth', (req, res) => {
-  console.log("la")
-
-  if(req.body.user){
-    getOrCreateGithub(req.body.user.email)
-  }
-})
 
 router.post('/googleauth', async (req, res) => {
   const tokenIsValid = await checkToken(req.body.user.token, "google", req.body.user.email)

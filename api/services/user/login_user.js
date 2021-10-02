@@ -12,7 +12,7 @@ async function loginUser(user){
 		},
 	});
 	return new Promise((resolve, reject) => {
-		if (userDb){
+		if (userDb != null){
 			bcrypt.compare(user.password, userDb.password, function(err, res) {
 		if (err){
 			  // handle econsole.log("PASSWORD BCRYPT FAIL")
@@ -29,6 +29,7 @@ async function loginUser(user){
 			}
 		      });
 		}
+	resolve(-1)
 })
 }
 

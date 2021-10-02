@@ -46,4 +46,3 @@ router.post('/updateMovie', async (req, res) => {
 			message: "Something bad happened"
 		})
       })
-      })

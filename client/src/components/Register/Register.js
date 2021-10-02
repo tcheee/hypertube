@@ -73,7 +73,7 @@ function Register() {
       console.log(res);
       if (res.data.result) {
         console.log('user created');
-        history.push("/");
+        history.push("/login");
       }
       // ADD ALERT MESSAGE 
     })

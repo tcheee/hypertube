@@ -7,12 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
-import { googleProvider, githubProvider } from '../../config/authMethods';
+import { googleProvider} from '../../config/authMethods';
 import socialMediaAuth from '../../service/auth';
 import {Context} from '../../context/store'
 import isAuth from "../../service/decodeToken"
 import axios from "axios"
-
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -38,7 +39,7 @@ function Login() {
   // Hypertube auth 
   const [email, setEmail] = useState('');
   const [passwords, setPassword] = useState('')
-  const [state, dispatch] = useContext(Context);
+  //const [state, dispatch] = useContext(Context);
   const history = useHistory();
 
   const onInputChangeEmail = (event) => {
@@ -59,31 +60,32 @@ function Login() {
       console.log(res.data);
       if (res.data.result) {
         localStorage.setItem('accessToken', res.data.accesstoken);
+        localStorage.setItem('provider', res.data.provider);
         console.log('user created');
-        dispatch({type: 'SET_USER', payload: isAuth()});
+     //   dispatch({type: 'SET_USER', payload: isAuth()});
         history.push("/home");
       }
     })
     .catch( error => {
       console.log(error.response)
+      confirmAlert({
+        title: 'Email or Password incorect',
+        message: 'Please try again',
+        buttons: [
+          {
+            label: 'Ok',
+            onClick: () => {}
+          }
+        ]
+      });
     }
 
     )
   }
 
-  // github and google auth 
-  const handleOnClick = async (provider) => {
+  // google auth 
+  const handleGoogleOnClick = async (provider) => {
     const res = await socialMediaAuth(provider);
-    if (provider === githubProvider && res){
-      const user = {
-        email : res.email
-      }
-      axios.post(`http://localhost:5000/githubauth`, { user })
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
-    }
     if (provider === googleProvider && res){
       console.log(res)
       const user = {
@@ -92,14 +94,17 @@ function Login() {
         image : res.user.photoURL,
         token : res.credential.idToken
       }
+      localStorage.setItem('provider', "google");
+      localStorage.setItem('token', res.credential.idToken)
       axios.post(`http://localhost:5000/googleauth`, { user })
       .then(res => {
         console.log(res);
         console.log(res.data);
       })
     }
-    console.log(res.credential)
-    console.log(res)
+  }
+  const handle42OnClick = async () => {
+
   }
   const classes = useStyles();
   return (
@@ -158,11 +163,11 @@ function Login() {
               </Grid>
             </Grid>
           </form>
-          <button onClick={() => handleOnClick(githubProvider)}
+          <button onClick={() => handle42OnClick()}
             >
               Sign in with github
             </button>
-          <button onClick={() => handleOnClick(googleProvider)}>
+          <button onClick={() => handleGoogleOnClick(googleProvider)}>
             sign in with google
           </button>
         </div>

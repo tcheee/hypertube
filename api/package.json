@@ -28,6 +28,7 @@
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.12",
     "opensubtitles-api": "^5.1.2",
+    "react-confirm-alert": "^2.7.0",
     "torrent-stream": "^1.2.1"
   }
 }
