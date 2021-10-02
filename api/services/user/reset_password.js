@@ -16,7 +16,7 @@ const resetPassword = async (id, password) => {
 	      })
 }
 
-function resend_password(email) {
+async function resend_password(email) {
 	const user = await prisma.user.findUnique({
 		where: {
 		  email: email,
