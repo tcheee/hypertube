@@ -1,3 +1,4 @@
+import React, { useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -5,6 +6,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from "axios"
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,6 +31,28 @@ const useStyles = makeStyles((theme) => ({
 
 function Forget() {
   const classes = useStyles();
+  const history = useHistory();
+  const [email, setEmail] = useState('');
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const user = {
+      email : email,
+    }
+    axios.post(`http://localhost:5000/forgetPassword`, { user })
+    .then(res => {
+      console.log(res.data);
+      if (res.data.result) {
+        console.log('Mail sent');
+        history.push("/login");
+      }
+    })
+    .catch( error => {
+      console.log(error.response)
+    }
+    )
+  }
+
   return (
     <div className={classes.full}>
   `    <Container component="main" maxWidth="xs">
@@ -38,7 +63,7 @@ function Forget() {
           <Typography component="h1" variant="h5">
             Receive an email to reset password
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form}  onSubmit={onSubmit} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -49,7 +74,8 @@ function Forget() {
               name="email"
               autoComplete="email"
               autoFocus
-            />
+              onChange={(e) => setEmail(e.target.value)}
+              />
             <Button
               type="submit"
               fullWidth
