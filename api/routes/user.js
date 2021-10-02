@@ -18,16 +18,14 @@ router.get('/', (req, res) => {
 router.post('/login', async (req, res) => {
   console.log("LOGIN TRY")
   if(req.body.user){
-    console.log("pass")
     const result = await loginUser(req.body.user)
-    console.log(result)
     if(result != "-1"){
       return res.send({
         result: true,
         message: "User Successfully login",
         accesstoken: result[0],
         user: result[1],
-        provider: hypertube,
+        provider: "hypertube",
       })
     }
     else{

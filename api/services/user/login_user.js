@@ -13,12 +13,13 @@ async function loginUser(user){
 	});
 	return new Promise((resolve, reject) => {
 		if (userDb != null){
+			console.log(userDb)
 			bcrypt.compare(user.password, userDb.password, function(err, res) {
 		if (err){
 			  // handle econsole.log("PASSWORD BCRYPT FAIL")
-				resolve(-1)
+			resolve(-1)
 			}
-			if (res) {
+		if (res) {
 			const accesstoken = jwt.sign(userDb, process.env.ACCESS_TOKEN_SECRET)
 			resolve([accesstoken, userDb]);
 			  // Send JWT
@@ -29,7 +30,6 @@ async function loginUser(user){
 			}
 		      });
 		}
-	resolve(-1)
 })
 }
 
