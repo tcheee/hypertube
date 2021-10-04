@@ -1,16 +1,17 @@
 const axios = require('axios')
 const getValidImage = require('./downloadImage');
 
-const getTrendingMovie = () => {
+const getTrendingMovie = (genre, page) => {
     return new Promise(async (resolve, reject) => {
-        const result = await axios.get('https://yts.megaproxy.info/api/v2/list_movies.json?page=1&sort_by=download_count&limit=21')
+        const result = await axios.get(`https://yts.megaproxy.info/api/v2/list_movies.json?page=${page}&sort_by=download_count&limit=48&genre=${genre}`)
         .then(async (result) => {
             const data = result.data.data.movies;
+            const pages = Math.floor(result.data.data.movie_count / 48) + 1;
             const modifiedData = await Promise.all(data.map(async (movie) => {
                 movie.image =  await getValidImage(movie.imdb_code)
                 return movie;
             }));
-            resolve(modifiedData);
+            resolve({count: pages, movies: modifiedData});
         }).catch(err => {
             console.log(err)
             resolve({})
