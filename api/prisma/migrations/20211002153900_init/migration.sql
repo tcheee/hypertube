@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT,
     "firstname" TEXT,
@@ -17,7 +17,8 @@ CREATE TABLE "Movies" (
     "movieId" INTEGER NOT NULL,
     "resolution" TEXT,
     "image_link" TEXT,
-    "isDownload" BOOLEAN,
+    "lastTimewatch" TIMESTAMP(3) NOT NULL,
+    "isDownload" BOOLEAN NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -25,7 +26,7 @@ CREATE TABLE "Movies" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "fromId" INTEGER NOT NULL,
+    "fromId" TEXT NOT NULL,
     "moviesId" INTEGER NOT NULL,
     "comment" TEXT NOT NULL,
 

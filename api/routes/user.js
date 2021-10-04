@@ -8,6 +8,7 @@ const checkToken = require('../services/auth/check-token')
 const getAllUser = require('../services/user/get_user')
 const getUser = require('../services/user/get_user')
 const resetPassword = require('../services/user/reset_password')
+const resend_password = require('../services/user/reset_password')
 const updateUser = require('../services/user/update_user')
 
 
@@ -116,6 +117,20 @@ router.post('/resetpassword', async (req, res) => {
     message: "We must have an Id & Password"
   })
 })
+
+router.post('/forgetPassword', async (req, res) => {
+  if(req.body.user){
+    x = await resend_password(req.body.user.email)
+    if (x == 0){
+      return res.send({
+      message : "Email successfully send"
+    })
+   }
+  else{ 
+    return res.status(401).send({
+    message: "We must have a correct Email"
+  })}
+  }})
 
 router.patch('/updateUser', async (req, res) => {
   if(req.body.user){
