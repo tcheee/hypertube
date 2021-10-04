@@ -91,7 +91,7 @@ function Login() {
   const classes = useStyles();
   return (
     <div>
-      <Container component="main" maxWidth="xs" className={classes.div}>
+      <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <Typography component="h1" variant="h5" className={classes.textColor}>
             Sign in to Hypertube

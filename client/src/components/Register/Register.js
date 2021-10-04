@@ -63,9 +63,9 @@ function Register() {
   }
   return (
     <div >
-  `    <Container component="main" maxWidth="xs" className={classes.div}>
+  `    <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+          <Avatar className={classes.avatar_color}>
             🥳
           </Avatar>
           <Typography component="h1" variant="h5" style={{color: "#E50914"}}>

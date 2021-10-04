@@ -34,11 +34,11 @@ function Profile() {
 
   return (
     <div>
-      <Container component="main" maxWidth="xs" className={classes.div}>
+      <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
-              <Avatar alt="Remy Sharp" src="https://via.placeholder.com/100" className={classes.large}/>
+              <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>
           </div>
           <form className={classes.form} noValidate>
           <Grid container spacing={2}>

@@ -64,6 +64,7 @@ function Movie() {
     let { id } = useParams()
     const [comments, setComments] = useState(null)
     const [title, setTitle] = useState(null)
+    const [summary, setSummary] = useState(null)
     const [magnet, setMagnet] = useState(null)
     const [playing, setPlaying] = useState(false)
     const [launchDownload, setLaunchDownload] = useState(false);
@@ -81,6 +82,7 @@ function Movie() {
 
     if (location.state && magnet == null) {
         setTitle(location.state.name)
+        setSummary(location.state.summary)
         console.log(location.state)
         console.log(location.state.torrents)
         const torrents = location.state.torrents
@@ -123,6 +125,7 @@ function Movie() {
                 <div> 
                     <div>
                     <h2 className={classes.title}> {title} </h2>
+                    {/* <h5> {summary} </h5> */}
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="tabs" centered>
@@ -131,20 +134,24 @@ function Movie() {
                         </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
-                        <video width='100%' controls  crossOrigin="anonymous">
-                            <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                            <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                            <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                            <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                        </video>
+                        <div>
+                            <video width='100%' controls  crossOrigin="anonymous">
+                                <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                                <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                                <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                                <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                            </video>
+                        </div>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                        <video width='100%' controls  crossOrigin="anonymous">
-                            <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                            <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                            <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                            <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                        </video>
+                        <div>
+                            <video width='100%' controls  crossOrigin="anonymous">
+                                <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                                <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                                <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                                <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                            </video>
+                        </div>
                         </TabPanel>
                     </Box>
                     </div>

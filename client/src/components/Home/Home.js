@@ -6,7 +6,7 @@ import Notecard from '../Shared/Notecard'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import Pagination from '@material-ui/lab/Pagination';
+import Pagination from '@mui/material/Pagination';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom"
@@ -15,7 +15,6 @@ import {Context} from '../../context/store'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 
@@ -29,9 +28,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems:'center'
       },
     modal: {
-        position: 'absolute',
         top: '300px',
-        left: '500px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         width: '400',
         background: 'white',
         color: 'red',
@@ -41,7 +40,13 @@ const useStyles = makeStyles((theme) => ({
     },
     preferences: {
       bottom: '8px', 
-      color: '#E50914'
+      color: '#E50914',
+      backgroundColor:'yellow'
+    },
+    ul: {
+      "& .MuiPaginationItem-root": {
+        color: "#E50914"
+      }
     }
   }));
 
@@ -60,7 +65,11 @@ const categories = [
 
 const sortMovie = (type, object) => {
   if (type === "name") {
-    object.sort()
+    object.sort(function(a, b) {
+      if(a.title > b.title) { return 1; }
+      if(a.title < b.title) { return -1; }
+    })
+    console.log(object)
   }
   if (type === "rating") {
     object.sort(function(a, b) {
@@ -145,28 +154,49 @@ function Home() {
     category === 'All' ? fetchMovies('', value) : fetchMovies(category, value)   
   };
 
-  const handleScroll = (e) => {
-    console.log('here')
-    console.log(e.target)
-    console.log(e.target.scrollTop)
-  }
-
   return (
-    <div onScroll={(e) => handleScroll(e)}>
     <Container >
-          {!state.loading && <Button onClick={handleOpen} className={classes.preferences}> 📺 Preferences </Button>}
+      <div>
+          {!state.loading && 
+          <Button onClick={handleOpen}
+          style={{ backgroundColor: 'transparent' }}
+          sx={{
+            color: '#E50914',
+            marginTop: "10px",
+            display: 'flex',
+            flexDirection: 'column',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+          > 
+          📺 Preferences 
+          </Button>}
           <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box className={classes.modal}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
+          <Box
+            sx={{
+              backgroundColor: "white",
+              width: "500px",
+              marginTop: "200px",
+              borderRadius: "4%",
+              backgroundColor: 'rgba(255,255,255,0.75)',
+              display: 'flex',
+              flexDirection: 'column',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              alignItems: 'center'
+            }} 
+            >
+            <div>
+            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center', color: '#E50914'}}>
+              Select your preferences
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <Typography>
+              Sort the page result
             </Typography>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <Select
@@ -174,7 +204,7 @@ function Home() {
                 onChange={(e) => setSorting(e.target.value)}
                 input={<OutlinedInput />}
               >
-                  <MenuItem key="name" value="Name">
+                  <MenuItem key="name" value="name">
                     Name
                   </MenuItem>
                   <MenuItem key="rating" value="rating">
@@ -184,50 +214,85 @@ function Home() {
                     Year
                   </MenuItem>
               </Select>
-              <FormHelperText>Select a way to sort the result of your search</FormHelperText>
             </FormControl>
-            {!location.search && <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <Select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                input={<OutlinedInput />}
-                placeholder="Category"
-              >
-                <MenuItem disabled value="">
-                  <em>Category</em>
-                </MenuItem>
-                {categories.map((cat) => (
-                  <MenuItem
-                    key={cat}
-                    value={cat}
-                  >
-                    {cat}
+            {!location.search && (
+              <div> 
+              <Typography>
+                Filter per category
+              </Typography>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <Select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  input={<OutlinedInput />}
+                  placeholder="Category"
+                >
+                  <MenuItem disabled value="">
+                    <em>Category</em>
                   </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText>Select a category to filter movies</FormHelperText>
-            </FormControl>}
-            <Slider
-              getAriaLabel={() => 'Temperature range'}
-              value={productionYear}
-              onChange={(event, newValue) => setProductionYear(newValue)}
-              min={1950}
-              max={2022}
-              valueLabelDisplay="auto"
-            />
-            <Slider
-              getAriaLabel={() => 'Temperature range'}
-              value={rating}
-              onChange={(event, newValue) => setRating(newValue)}
-              step={0.5}
-              min={0}
-              max={10}
-              valueLabelDisplay="auto"
-            />
-            <Button variant="contained" onClick={() => handlePreferences()}>Save</Button>
+                  {categories.map((cat) => (
+                    <MenuItem
+                      key={cat}
+                      value={cat}
+                    >
+                      {cat}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>)}
+            <div>
+            <Typography>
+              Production Year Range
+            </Typography>
+              <Slider
+                getAriaLabel={() => 'Temperature range'}
+                value={productionYear}
+                sx={{
+                  width:"400px",
+                  marginLeft: '40px',
+                  textAlign: 'center',
+                  color: "#E50914",
+                }}
+                onChange={(event, newValue) => setProductionYear(newValue)}
+                min={1950}
+                max={2022}
+                valueLabelDisplay="auto"
+              />
+            <Typography>
+              Rating Range
+            </Typography>
+              <Slider
+                getAriaLabel={() => 'Temperature range'}
+                value={rating}
+                sx={{
+                  width:"400px",
+                  marginLeft: '40px',
+                  textAlign: 'center',
+                  color: "#E50914",
+                }}
+                onChange={(event, newValue) => setRating(newValue)}
+                step={0.5}
+                min={0}
+                max={10}
+                valueLabelDisplay="auto"
+              />
+            </div>
+            <Button variant="contained"
+             sx={{marginLeft: 'auto', marginRight: 'auto'}} 
+             onClick={() => handlePreferences()}
+             sx={{
+              marginLeft: '190px',
+              marginBottom: '10px',
+              backgroundColor: "#E50914",
+              textAlign: 'center'
+            }}
+             >
+               Save</Button>
+            </div>
           </Box>
         </Modal>
-            <Grid container spacing={4} onScroll={(e) => handleScroll(e)}>
+            <Grid container spacing={4} >
                 {state.loading &&
                   <Loader
                   lines={13} 
@@ -264,13 +329,27 @@ function Home() {
             </Grid>
             <div className={classes.root}>
             {!state.loading && !location.search && (movies.length === 0 ? null :
-            <Stack spacing={2}>
-              <Pagination count={pages} color="secondary" variant="outlined" shape="rounded" page={activePage} onChange={handlePagination}/>
+            <Stack spacing={2} 
+            sx={{
+              marginTop: "20px",
+              marginBottom: "20px",
+              display: 'flex',
+              flexDirection: 'column',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}>
+              <Pagination 
+              count={pages} 
+              variant="outlined" 
+              className={classes.ul}
+              shape="rounded" 
+              page={activePage} 
+              onChange={handlePagination}/>
             </Stack>
             )}
            </div>
+           </div>
     </Container>
-    </div>
   );
 }
 
