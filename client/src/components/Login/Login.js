@@ -14,25 +14,7 @@ import isAuth from "../../service/decodeToken"
 import axios from "axios"
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: 'white',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import useStyles from '../../styles/styles.js'
 
 
 function Login() {
@@ -79,6 +61,7 @@ function Login() {
         ]
       });
     }
+
     )
   }
 
@@ -108,14 +91,15 @@ function Login() {
   const classes = useStyles();
   return (
     <div>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" className={classes.div}>
         <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h5" className={classes.textColor}>
+            Sign in to Hypertube
           </Typography>
           <form className={classes.form} onSubmit={onSubmit} noValidate>
             <TextField
-              variant="outlined"
+              className={classes.field}
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -128,7 +112,8 @@ function Login() {
               autoFocus
             />
             <TextField
-              variant="outlined"
+              className={classes.field}
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -143,8 +128,8 @@ function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
               className={classes.submit}
+              style={{backgroundColor: "#E50914", color: 'white'}}
             >
               Sign In
             </Button>

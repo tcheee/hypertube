@@ -7,10 +7,18 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Pagination from '@material-ui/lab/Pagination';
+import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom"
 import Loader from 'react-loader';
 import {Context} from '../../context/store'
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Select from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,50 +30,89 @@ const useStyles = makeStyles((theme) => ({
       },
     modal: {
         position: 'absolute',
-        top: '50px',
-        left: '50px',
-        transform: 'translate(-50%, -50%)',
+        top: '300px',
+        left: '500px',
         width: '400',
-        bgcolor: 'background.paper',
-        color: 'white',
+        background: 'white',
+        color: 'red',
         border: '2px solid #000',
-        boxShadow: '24px',
+        boxShadow: '30px',
         p: '4px',
     },
     preferences: {
-      marginBottom: '8px', 
+      bottom: '8px', 
       color: '#E50914'
     }
   }));
 
+const categories = [
+  'All',
+  'Comedy',
+  'Horror',
+  'Romance',
+  'Action',
+  'Adventure',
+  'Thriller',
+  'Animation',
+  'Sci-fi',
+  'Fantasy'
+]
+
+const sortMovie = (type, object) => {
+  if (type === "name") {
+    object.sort()
+  }
+  if (type === "rating") {
+    object.sort(function(a, b) {
+      return (b.rating - a.rating)
+    })
+  }
+  if (type === "year") {
+    object.sort(function(a, b) {
+      return (b.year - a.year)
+    })
+  }
+  return (object)
+}
 
 function Home() {
   const classes = useStyles();
   const [state, dispatch] = useContext(Context);
   const [movies, setMovies] = useState([])
+  const [originalSearch, setOriginalSearch] = useState([])
   const [pages, setPages] = useState(1) 
   const [query, setQuery] = useState(null)
   const [error, setError] = useState(false)
   const [activePage, setActivePage] = useState(1) 
   const location = useLocation();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [productionYear, setProductionYear] = useState([1950, 2022])
+  const [rating, setRating] = useState([0, 10])
+  const [sorting, setSorting] = useState('')
+  const [category, setCategory] = useState('')
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const fetchMovies = (category, page) => {
+    setError(false);
+    dispatch({type: 'START_LOADING'});
+    fetch('http://localhost:5000/api/movie/trending?category=' + category.toLowerCase() + "&page=" + page)
+      .then(res => {
+          return res.json()
+      })
+      .then((data) => {
+            dispatch({type: 'STOP_LOADING'});
+            console.log(data)
+            setPages(data.count);
+            const result = data.movies.filter(movie => movie.rating >= rating[0] && movie.rating <= rating[1] && movie.year >= productionYear[0] && movie.year <= productionYear[1]);
+            setMovies(result)
+      })
+  };
+
   useEffect(() => {
     if (!location.search) { 
-      setError(false);
-      dispatch({type: 'START_LOADING'});
-      fetch('http://localhost:5000/api/movie/trending')
-        .then(res => {
-            return res.json()
-        })
-        .then((data) => {
-              dispatch({type: 'STOP_LOADING'});
-              setMovies(data)
-              setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
-        })
+        fetchMovies('')
       } else {
         let data = location.state.result
         console.log(data)
@@ -76,14 +123,26 @@ function Home() {
           setError(true);
         } else {
           setError(false)
+          setOriginalSearch(data)
           setMovies(data)
           setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1)
         }
       }
   }, [location])
 
+  const handlePreferences = async () => {
+    setOpen(false);
+    if (!location.search) { 
+      category === 'All' ? fetchMovies('') : fetchMovies(category)    
+    } else {
+      const result = originalSearch.filter(movie => movie.rating >= rating[0] && movie.rating <= rating[1] && movie.year >= productionYear[0] && movie.year <= productionYear[1]);
+      setMovies(sortMovie(sorting, result))
+    }
+  }
+
   const handlePagination = (event, value) => {
     setActivePage(value);
+    category === 'All' ? fetchMovies('', value) : fetchMovies(category, value)   
   };
 
   const handleScroll = (e) => {
@@ -95,14 +154,79 @@ function Home() {
   return (
     <div onScroll={(e) => handleScroll(e)}>
     <Container >
-          <Button onClick={handleOpen} className={classes.preferences}> 📺 Preferences </Button>
+          {!state.loading && <Button onClick={handleOpen} className={classes.preferences}> 📺 Preferences </Button>}
           <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-          </Modal>
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box className={classes.modal}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <Select
+                value={sorting}
+                onChange={(e) => setSorting(e.target.value)}
+                input={<OutlinedInput />}
+              >
+                  <MenuItem key="name" value="Name">
+                    Name
+                  </MenuItem>
+                  <MenuItem key="rating" value="rating">
+                    Rating
+                  </MenuItem>
+                  <MenuItem key="year" value="year">
+                    Year
+                  </MenuItem>
+              </Select>
+              <FormHelperText>Select a way to sort the result of your search</FormHelperText>
+            </FormControl>
+            {!location.search && <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <Select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                input={<OutlinedInput />}
+                placeholder="Category"
+              >
+                <MenuItem disabled value="">
+                  <em>Category</em>
+                </MenuItem>
+                {categories.map((cat) => (
+                  <MenuItem
+                    key={cat}
+                    value={cat}
+                  >
+                    {cat}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>Select a category to filter movies</FormHelperText>
+            </FormControl>}
+            <Slider
+              getAriaLabel={() => 'Temperature range'}
+              value={productionYear}
+              onChange={(event, newValue) => setProductionYear(newValue)}
+              min={1950}
+              max={2022}
+              valueLabelDisplay="auto"
+            />
+            <Slider
+              getAriaLabel={() => 'Temperature range'}
+              value={rating}
+              onChange={(event, newValue) => setRating(newValue)}
+              step={0.5}
+              min={0}
+              max={10}
+              valueLabelDisplay="auto"
+            />
+            <Button variant="contained" onClick={() => handlePreferences()}>Save</Button>
+          </Box>
+        </Modal>
             <Grid container spacing={4} onScroll={(e) => handleScroll(e)}>
                 {state.loading &&
                   <Loader
@@ -123,7 +247,8 @@ function Home() {
                   top="50%" 
                   left="50%" 
                   scale={1.00}
-                  loadedClassName="loadedContent" />
+                  loadedClassName="loadedContent" 
+                  />
                 }
                 {error &&
                   <p> Nothing was found. Please try to type the exact name in the English version.</p>
@@ -138,9 +263,11 @@ function Home() {
                 )))}
             </Grid>
             <div className={classes.root}>
-            {/* {!state.loading && (movies.length === 0 ? null :
-            <Pagination count={pages} color="secondary" page={activePage} onChange={handlePagination} align='center'/>
-            )} */}
+            {!state.loading && !location.search && (movies.length === 0 ? null :
+            <Stack spacing={2}>
+              <Pagination count={pages} color="secondary" variant="outlined" shape="rounded" page={activePage} onChange={handlePagination}/>
+            </Stack>
+            )}
            </div>
     </Container>
     </div>
