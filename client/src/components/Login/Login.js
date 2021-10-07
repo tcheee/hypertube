@@ -15,6 +15,10 @@ import axios from "axios"
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import useStyles from '../../styles/styles.js'
+import GoogleIcon from '@mui/icons-material/Google';
+import ComputerIcon from '@mui/icons-material/Computer';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 
 
 function Login() {
@@ -147,13 +151,25 @@ function Login() {
               </Grid>
             </Grid>
           </form>
-          <button onClick={() => handle42OnClick()}
+          <Divider style={{color:'white', marginTop: "10px"}}>OR</Divider>
+          <Stack spacing={2} style={{marginTop: "10px"}}>
+            <Button 
+              variant="outlined" 
+              style={{backgroundColor: "#f3f3f3", color: 'red'}}
+              startIcon={<ComputerIcon />}  
+              onClick={() => handle42OnClick()}  
             >
-              Sign in with github
-            </button>
-          <button onClick={() => handleGoogleOnClick(googleProvider)}>
-            sign in with google
-          </button>
+              Sign in with 42
+            </Button>
+            <Button 
+              variant="outlined" 
+              style={{backgroundColor: "#f3f3f3", color: 'red'}}
+              startIcon={<GoogleIcon />}  
+              onClick={() => handleGoogleOnClick(googleProvider)}  
+            >
+              Sign in with Google
+            </Button>
+          </Stack>
         </div>
       </Container>
     </div>

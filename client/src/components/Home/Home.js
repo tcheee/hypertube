@@ -321,7 +321,7 @@ function Home() {
                 {!state.loading && (movies.length === 0 ? null :
                 movies.map((movie) => (
                         <Grid item key={movie.id} xs={12} md={6} lg={4}>
-                            <Link to={{pathname: `/movie/${movie.id}`, state:{torrents: movie.torrents, id: movie.imdb_code, name: movie.title, summary: movie.summary}}} style={{ textDecoration: 'none' }}>
+                            <Link to={{pathname: `/movie/${movie.id}`, state:{torrents: movie.torrents, id: movie.imdb_code, name: movie.title, summary: movie.summary, img: movie.image}}} style={{ textDecoration: 'none' }}>
                                 <Notecard movie={movie} />
                             </Link>
                         </Grid>

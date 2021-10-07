@@ -11,29 +11,31 @@ generator client {
 }
 
 model User {
-  id      String      @id @default(uuid())
-  email   String   @unique
-  password String? 
+  id        Int         @id @default(autoincrement())
+  uuid      String      @default(uuid())
+  email     String      @unique
+  password  String? 
   firstname String?
-  lastName String?
-  username String?
-  comments Comment[]
+  lastName  String?
+  username  String?
+  comments  Comment[]
   image String?
 }
 
 model Movies {
-  id      Int     @id @default(autoincrement())
-  movieId   Int   
+  id            Int     @id @default(autoincrement())
+  hash          String  @unique
+  movieId       String   
   resolution    String?
   image_link    String?
-  lastTimewatch DateTime
-  isDownload Boolean
+  lastTimewatch Int
+  isDownload    Boolean
 }
 
 model Comment {
-  id    Int     @id @default(autoincrement())
-  from  User @relation(fields: [fromId], references: [id])
-  fromId String
-  moviesId  Int
-  comment   String
+  id            Int     @id @default(autoincrement())
+  from          User    @relation(fields: [fromId], references: [id])
+  fromId        Int
+  movieId       String
+  comment       String
 }

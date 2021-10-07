@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {useParams} from "react-router-dom"
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import ReactPlayer from 'react-player'
@@ -14,16 +14,34 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@mui/material/Box';
 import { Link, useLocation } from "react-router-dom"
 import axios from 'axios'
+import {Context} from '../../context/store'
 
 const useStyles = makeStyles((theme) => ({
     title: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        color: '#E50914'
+    },
+    summary: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        color: '#b3b3b3'
     },
     comment:{
         marginBottom: theme.spacing(2)
-    }
+    },
+    video: {
+        width: "1000px",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    textContainer:{
+        marginLeft: 'auto',
+        width:"1000px"
+    },
   }));
 
   function TabPanel(props) {
@@ -59,12 +77,40 @@ const useStyles = makeStyles((theme) => ({
     };
   }
 
+  function updateMovie(hash, movieId, resolution, img) {
+    axios.post(`http://localhost:5000/addMovie`, { 
+        hash,
+        movieId: movieId,
+        resolution: resolution,
+        image_link: img
+       })
+    .then(res => {
+      console.log(res);
+    })
+  }
+
+  function postComment(movieId, comment, userId) {
+    return new Promise( (resolve, reject) => {
+        axios.post(`http://localhost:5000/addComment`, { 
+            movieId,
+            comment,
+            userId
+           })
+        .then(res => {
+          console.log(res);
+          resolve (res.data.comments)
+        })
+    })
+  }
+
 function Movie() {
     const classes = useStyles();
+    const [state, dispatch] = useContext(Context);
     let { id } = useParams()
     const [comments, setComments] = useState(null)
     const [title, setTitle] = useState(null)
     const [summary, setSummary] = useState(null)
+    const [comment, setComment] = useState(null)
     const [magnet, setMagnet] = useState(null)
     const [playing, setPlaying] = useState(false)
     const [launchDownload, setLaunchDownload] = useState(false);
@@ -95,24 +141,41 @@ function Movie() {
     }
 
     useEffect(() => {
-        fetch('https://retoolapi.dev/Y3m1i2/data')
-          .then(res => {
-              return res.json()
+        axios.get(`http://localhost:5000/getCommentsMovie`, {   
+            params: {
+              movieId: location.state.id
+            }
           })
-          .then((data) => {
-              setComments(data)
-              console.log(data)
-          })
+        .then(res => {
+          setComments(res.data.comments);
+        })
+        //updateMovie(hash, location.state.id, resolution, location.state.img)
     }, [])
 
-    const handleClick = () => {
-        setResolution('1080p');
+    useEffect(() => {
+          updateMovie(hash, location.state.id, resolution, location.state.img)
+    }, [hash])
+
+
+
+    const handleClickResolution = (resolution) => {
+        setResolution(resolution);
         const torrents = location.state.torrents
         torrents.map(torrent => {
             if (torrent.quality === resolution) {
                 setHash(torrent.hash);
             }
         })
+    }
+
+    const handleEnter = async (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            console.log('lets do it')
+            e.target.value = null;
+            const newComments = await postComment(location.state.id, comment, state.user.id);
+            setComments(newComments)
+        }
     }
 
     return (
@@ -124,36 +187,38 @@ function Movie() {
             >
                 <div> 
                     <div>
-                    <h2 className={classes.title}> {title} </h2>
-                    {/* <h5> {summary} </h5> */}
-                    <Box sx={{ width: '100%' }}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="tabs" centered>
-                            <Tab label="720p" {...a11yProps(0)} />
-                            <Tab label="1080p" {...a11yProps(1)} />
-                        </Tabs>
+                        <div className={classes.textContainer}> 
+                            <h2 className={classes.title}> {title} </h2>
+                            <h5 className={classes.summary}> {summary} </h5>
+                        </div>
+                        <Box sx={{ width: '100%' }}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs value={value} onChange={handleChange} aria-label="tabs" centered>
+                                <Tab label="720p" {...a11yProps(0)} onClick={(e) => handleClickResolution('720p')}/>
+                                <Tab label="1080p" {...a11yProps(1)} onClick={(e) => handleClickResolution('1080p')}/>
+                            </Tabs>
+                            </Box>
+                            <TabPanel value={value} index={0}>
+                            <div className={classes.video}>
+                                <video width='100%' controls  crossOrigin="anonymous">
+                                    <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
+                                    <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                                    <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                                    <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                                </video>
+                            </div>
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                            <div className={classes.video}> 
+                                <video width='100%' controls  crossOrigin="anonymous">
+                                    <source label="1080p" src={`http://localhost:5000/api/stream/${hash}`} />
+                                    <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
+                                    <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
+                                    <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
+                                </video>
+                            </div>
+                            </TabPanel>
                         </Box>
-                        <TabPanel value={value} index={0}>
-                        <div>
-                            <video width='100%' controls  crossOrigin="anonymous">
-                                <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                                <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                                <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                                <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                            </video>
-                        </div>
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                        <div>
-                            <video width='100%' controls  crossOrigin="anonymous">
-                                <source label="720p" src={`http://localhost:5000/api/stream/${hash}`} />
-                                <track label='English' kind='subtitles' srcLang='en' src={`http://localhost:5000/api/subtitles/${location.state.id}-en`} />
-                                <track label='French' kind='subtitles' srcLang='fr' src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`} />
-                                <track label='Spanish' kind='subtitles' srcLang='es' src={`http://localhost:5000/api/subtitles/${location.state.id}-es`} />
-                            </video>
-                        </div>
-                        </TabPanel>
-                    </Box>
                     </div>
                 <form>
                     <TextField
@@ -166,6 +231,8 @@ function Movie() {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    onChange={(e) => setComment(e.target.value)}
+                    onKeyPress={(e) => handleEnter(e)}
                     />
                 </form>
                 {comments && 
@@ -182,11 +249,11 @@ function Movie() {
                                 <Avatar alt="Remy Sharp" src="https://via.placeholder.com/25" />
                             </Grid>
                             <Grid item>
-                                <h5> {comment.Username}</h5>
+                                <h5> {comment.from.username}</h5>
                             </Grid>
                         </Grid>
                         <Typography variant="body1">
-                            {comment.Comment}
+                            {comment.comment}
                         </Typography>
                     </Paper>
                 ))}
