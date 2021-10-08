@@ -42,7 +42,23 @@ function Login() {
   const onSuccess = response => {
     console.log(response.code);
     axios.post(`http://localhost:5000/42auth`, {code : response.code})
-  
+    .then(res => {
+      console.log(res.data)
+      localStorage.setItem('accessToken', res.data.user.token);
+      localStorage.setItem('provider', res.data.provider);
+      history.push("home")
+    }).catch( error => {
+      confirmAlert({
+        title: 'Email or Password incorect',
+        message: 'Please try again',
+        buttons: [
+          {
+            label: 'Ok',
+            onClick: () => {}
+          }
+        ]
+      });
+    })
   }
 
   const onFailure = response => console.error(response);
