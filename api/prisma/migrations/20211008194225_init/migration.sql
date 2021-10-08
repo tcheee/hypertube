@@ -1,10 +1,11 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "uuid" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT,
     "firstname" TEXT,
-    "lastName" TEXT,
+    "lastname" TEXT,
     "username" TEXT,
     "image" TEXT,
 
@@ -13,12 +14,17 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Movies" (
+    "hash" TEXT NOT NULL,
     "id" SERIAL NOT NULL,
-    "movieId" INTEGER NOT NULL,
+    "movieId" TEXT NOT NULL,
     "resolution" TEXT,
     "image_link" TEXT,
-    "lastTimewatch" TIMESTAMP(3) NOT NULL,
+    "lastTimewatch" INTEGER NOT NULL,
     "isDownload" BOOLEAN NOT NULL,
+    "summary" TEXT,
+    "title" TEXT,
+    "rating" TEXT,
+    "productionYear" INTEGER,
 
     PRIMARY KEY ("id")
 );
@@ -26,8 +32,8 @@ CREATE TABLE "Movies" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "fromId" TEXT NOT NULL,
-    "moviesId" INTEGER NOT NULL,
+    "fromId" INTEGER NOT NULL,
+    "movieId" TEXT NOT NULL,
     "comment" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
@@ -35,6 +41,9 @@ CREATE TABLE "Comment" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Movies.hash_unique" ON "Movies"("hash");
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD FOREIGN KEY ("fromId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,6 +1,5 @@
 require('dotenv').config()
 const axios = require('axios')
-const { resolveContent } = require('nodemailer/lib/shared')
 
 const auth42 = async (code) => {
 	try {
@@ -22,7 +21,7 @@ const auth42 = async (code) => {
 			username: response.data.displayname,
 			lastname: response.data.last_name,
 			image : response.data.image_url,
-			first_name : response.data.first_name,
+			firstname : response.data.first_name,
 			token : resp.data.access_token
 		}
 		return user 

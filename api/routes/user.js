@@ -86,15 +86,17 @@ router.post('/42auth', async (req, res) => {
 
 router.post('/googleauth', async (req, res) => {
   const tokenIsValid = await checkToken(req.body.user.token, "google", req.body.user.email)
+  console.log(tokenIsValid)
+ // const imageAsBase64 = fs.readFileSync(req.body.user.image, 'base64');
   if(tokenIsValid){
     console.log(req.body)
-    getOrCreateGoogle(req.body.user.email, req.body.user.username, req.body.user.image)
+    await getOrCreateGoogle(req.body.user.email, req.body.user.username, imageAsBase64)
     return res.send({
       message: "User Successfully Login",
     });
 }
-else 
-  return res.status(401).send({
+  else 
+    return res.status(401).send({
     message: "Token is not valid"
   })
 })
