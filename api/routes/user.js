@@ -10,7 +10,7 @@ const resetPassword = require('../services/user/reset_password')
 const resend_password = require('../services/user/reset_password')
 const updateUser = require('../services/user/update_user')
 const auth42 = require('../services/auth/auth42')
-
+const getOrCreate42 = require('../services/user/get_or_create_42')
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
   });
@@ -62,21 +62,26 @@ router.post('/42auth', async (req, res) => {
   if(req.body.code){
     console.log(req.body.code)
     response = await auth42(req.body.code)
-    console.log(response)
-  //  if(response !== -1){
-  //    await getOrCreate42(response)
-  //  }
-  //  else {
-  //  return res.status(401).send({
-  //  message: "42 authorization code is not valid"
- // })}
-//  }
-//  else {
- //   return res.send(401).send({
-  //    message: "We need a 42 authorization code"
-  //  })
- // }
-}})
+    console.log("THIS IS A RESPONSE" + response.email)
+    if(response !== -1){
+      await getOrCreate42(response)
+      return res.send({
+        message : "User Successfully login",
+        user : response,
+        provider : 42,
+      })
+    }
+    else {
+    return res.status(401).send({
+    message: "42 authorization code is not valid"
+  })}
+  }
+  else {
+    return res.send(401).send({
+      message: "We need a 42 authorization code"
+    })
+  }
+})
 
 
 router.post('/googleauth', async (req, res) => {
