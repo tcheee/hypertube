@@ -9,31 +9,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {Context} from '../../context/store'
 import axios from "axios"
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: 'white',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  large:{
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-    cursor: 'pointer',
-  }
-}));
+import useStyles from '../../styles/styles.js'
 
 function Profile() {
   const classes = useStyles();
@@ -62,15 +38,16 @@ function Profile() {
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} />
-              <Avatar alt="Remy Sharp" src="https://via.placeholder.com/100" className={classes.large}/>
+              <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>
           </div>
           <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                className={classes.field}
                 autoComplete="fname"
                 name="firstName"
-                variant="outlined"
+                variant="filled"
                 required
                 fullWidth
                 id="firstName"
@@ -81,7 +58,8 @@ function Profile() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                variant="outlined"
+                className={classes.field}
+                variant="filled"
                 required
                 fullWidth
                 id="lastName"
@@ -93,7 +71,8 @@ function Profile() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                className={classes.field}
+                variant="filled"
                 required
                 fullWidth
                 id="email"
@@ -105,7 +84,8 @@ function Profile() {
             </Grid>
             {editable && <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                className={classes.field}
+                variant="filled"
                 required
                 fullWidth
                 id="email"
@@ -116,7 +96,8 @@ function Profile() {
             </Grid>}
             {editable && <Grid item xs={12}>
               <TextField
-                variant="outlined"
+                className={classes.field}
+                variant="filled"
                 required
                 fullWidth
                 name="password"
@@ -132,10 +113,9 @@ function Profile() {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
-              className={classes.submit}
+              className={classes.submit }
             >
-              Sign Up
+              Save Changes
             </Button>}
           </form>
         </div>

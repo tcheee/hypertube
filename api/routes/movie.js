@@ -4,26 +4,37 @@ const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 
 router.post('/addMovie', async (req, res) => {
-	if(req.body.movie){
-		await prisma.movies.create({
-		  data : 
-		  {
-		    movieId : req.body.movie.movieId,
-		    resolution: req.body.movie.resolution,
-		    image_link: req.body.movie.image_link,
-		    lastTimewatch: req.body.movie.lastTimeWatch,
-		    isDownload: req.body.movie.isDownload,
-		  }      
+	console.log('we are adding a movie')
+	console.log(req.body)
+	const date = Date.now();
+
+	if(req.body.hash) {
+		const result = await prisma.movies.upsert({
+			where:{ hash: req.body.hash},
+			update: { lastTimewatch: date},
+			create: {
+				hash: req.body.hash,
+				movieId : req.body.movieId,
+				resolution: req.body.resolution,
+				image_link: req.body.image_link,
+				lastTimewatch: date,
+				isDownload: false
+			}    
 		})
-		return res.send({
-		  message: "Movie Created"
-		})
+
+		console.log(result)
+
+		return res.status(200).send({
+			result: true,
+			message: "Movie Created",
+		  })
 	}
-	else
+	else {
 		return res.status(401).send({
 			message: "Something bad happened"
 		})
-      })
+	}
+})
 
 router.post('/updateMovie', async (req, res) => {
 	if(req.body.movie){
@@ -66,3 +77,5 @@ router.get('/getOrCreateMovie', async (req, res) => {
 			message: "Something bad happened"
 		})
       })
+
+module.exports = router;

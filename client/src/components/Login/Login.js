@@ -12,6 +12,11 @@ import socialMediaAuth from '../../service/auth';
 import axios from "axios"
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import useStyles from '../../styles/styles.js'
+import GoogleIcon from '@mui/icons-material/Google';
+import ComputerIcon from '@mui/icons-material/Computer';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import OAuth2Login from 'react-simple-oauth2-login';
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -86,6 +91,7 @@ function Login() {
         ]
       });
     }
+
     )
   }
   // google auth 
@@ -113,12 +119,13 @@ function Login() {
     <div>
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h5" className={classes.textColor}>
+            Sign in to Hypertube
           </Typography>
           <form className={classes.form} onSubmit={onSubmit} noValidate>
             <TextField
-              variant="outlined"
+              className={classes.field}
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -131,7 +138,8 @@ function Login() {
               autoFocus
             />
             <TextField
-              variant="outlined"
+              className={classes.field}
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -146,8 +154,8 @@ function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
               className={classes.submit}
+              style={{backgroundColor: "#E50914", color: 'white'}}
             >
               Sign In
             </Button>
@@ -165,9 +173,25 @@ function Login() {
               </Grid>
             </Grid>
           </form>
-          <button onClick={() => handleGoogleOnClick(googleProvider)}>
-            sign in with google
-          </button>
+          <Divider style={{color:'white', marginTop: "10px"}}>OR</Divider>
+          <Stack spacing={2} style={{marginTop: "10px"}}>
+            <Button 
+              variant="outlined" 
+              style={{backgroundColor: "#f3f3f3", color: 'red'}}
+              startIcon={<ComputerIcon />}  
+              onClick={() => handle42OnClick()}  
+            >
+              Sign in with 42
+            </Button>
+            <Button 
+              variant="outlined" 
+              style={{backgroundColor: "#f3f3f3", color: 'red'}}
+              startIcon={<GoogleIcon />}  
+              onClick={() => handleGoogleOnClick(googleProvider)}  
+            >
+              Sign in with Google
+            </Button>
+          </Stack>
         </div>
       </Container>
       <OAuth2Login

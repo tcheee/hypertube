@@ -3,6 +3,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Rating from '@mui/material/Rating';
 
 const useStyles = makeStyles((theme) => ({
     hover: {
@@ -53,8 +54,9 @@ function Notecard({movie}) {
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {movie.column_2 || movie.title}
+                        {movie.column_2 || movie.title + " - " + movie.year }
                     </Typography>
+                    <Rating name="read-only" value={movie.rating} precision={0.5} max={10} readOnly />
                 </CardContent>
             </Card>
         </div>

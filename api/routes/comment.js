@@ -2,7 +2,8 @@ var express = require('express')
 var router = express.Router()
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
-
+const getCommentsMovie = require('../services/comment/getCommentsMovie')
+const createComment = require('../services/comment/createComment')
 
 router.get('/comments', async (req, res) => {
     const comments = await prisma.comment.findMany()
@@ -31,18 +32,16 @@ router.get('/commentsId', async (req, res) => {
   })
 })
 
-router.post('/commentsAdd', async (req, res) => {
-  if(req.body.comments){
-    await prisma.comment.create({
-      data : 
-      {
-        moviesId : req.body.comments.moviesId,
-        comment: req.body.comments.comment,
-        fromId: req.body.comments.fromId,
-      }      
-    })
+router.post('/addComment', async (req, res) => {
+  console.log('Comment created')
+  console.log(req.body)
+  if(req.body.comment){
+    const resultCreation = await createComment(req.body.movieId, req.body.comment, req.body.userId)
+    const resultGetComment = await getCommentsMovie(req.body.movieId)
+
     return res.send({
-      message: "comment Created"
+      success: resultCreation.success,
+      comments: resultGetComment.comments,
     })
   }
   else
@@ -52,15 +51,10 @@ router.post('/commentsAdd', async (req, res) => {
 })
 
 router.get('/getCommentsMovie', async (req, res) => {
-  if (req.body.movieId){
-    comments = await prisma.comments.findMany({
-      where : {
-        moviesId : req.body.movieId
-      }
-    })
-    return res.send({
-      comments: comments
-    })
+  if (req.query.movieId) {
+    const result = await getCommentsMovie(req.query.movieId)
+
+    return res.send(result)
   }
   else
     return res.status(401).send({
@@ -75,7 +69,7 @@ router.delete('/commentsId', async (req, res) => {
       {
         where : {
           id : req.body.id
-        }
+        },
       }
     )
     return res.send({

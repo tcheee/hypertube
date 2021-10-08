@@ -5,6 +5,7 @@ const userRouter = require('./routes/user');
 const streamingRouter = require('./routes/movieStreaming');
 const subtitlesRouter = require('./routes/subtitles');
 const commentRouter = require('./routes/comment');
+const movieRouter = require('./routes/movie');
 const scheduleDeletion = require('./subscribers/cronDeleteMovie')
 
 //Define const variable that are going to be used below
@@ -18,6 +19,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000' || ""}));
 
 //Getting the routes from the different routers
 app.use(userRouter);
+app.use(movieRouter);
 app.use(movieInfoRouter);
 app.use(commentRouter);
 app.use(streamingRouter);
