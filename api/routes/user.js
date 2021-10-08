@@ -2,15 +2,14 @@ var express = require('express')
 var router = express.Router()
 const createUser = require('../services/user/create_user.js')
 const loginUser = require('../services/user/login_user')
-const getOrCreateGoogle = require('../services/user/get_or_create_user')
-const getOrCreateGithub = require('../services/user/get_or_create_user')
+const getOrCreateGoogle = require('../services/user/get_or_create_google')
 const checkToken = require('../services/auth/check-token')
 const getAllUser = require('../services/user/get_user')
 const getUser = require('../services/user/get_user')
 const resetPassword = require('../services/user/reset_password')
 const resend_password = require('../services/user/reset_password')
 const updateUser = require('../services/user/update_user')
-
+const auth42 = require('../services/auth/auth42')
 
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
@@ -58,6 +57,26 @@ router.post('/hypertubeauth', async (req, res) => {
       message: "Something bad happened, Please try again"
     })
 })
+
+router.post('/42auth', async (req, res) => {
+  if(req.body.code){
+    console.log(req.body.code)
+    response = await auth42(req.body.code)
+    console.log(response)
+  //  if(response !== -1){
+  //    await getOrCreate42(response)
+  //  }
+  //  else {
+  //  return res.status(401).send({
+  //  message: "42 authorization code is not valid"
+ // })}
+//  }
+//  else {
+ //   return res.send(401).send({
+  //    message: "We need a 42 authorization code"
+  //  })
+ // }
+}})
 
 
 router.post('/googleauth', async (req, res) => {

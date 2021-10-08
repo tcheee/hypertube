@@ -1,7 +1,10 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
+const axios = require("axios")
+
 
 const getOrCreateGoogle = async (email, username, image) => {
+  console.log("WTFFFFFFFFFFF")
 	  await prisma.user.upsert({
           where: { email: email },
           update: {},
@@ -9,12 +12,4 @@ const getOrCreateGoogle = async (email, username, image) => {
         })
       }
 
-      const getOrCreateGithub = async (email) => {
-        await prisma.user.upsert({
-          where: { email: email },
-          update: {},
-          create: { email: email },
-        })
-      }      
-
-module.exports  = getOrCreateGoogle, getOrCreateGithub
+module.exports  = getOrCreateGoogle

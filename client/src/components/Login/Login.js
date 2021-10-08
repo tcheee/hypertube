@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,11 +9,10 @@ import Container from '@material-ui/core/Container';
 import { Link } from "react-router-dom";
 import { googleProvider} from '../../config/authMethods';
 import socialMediaAuth from '../../service/auth';
-import {Context} from '../../context/store'
-import isAuth from "../../service/decodeToken"
 import axios from "axios"
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import OAuth2Login from 'react-simple-oauth2-login';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -36,6 +35,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Login() {
+  // 42 auth
+  const onSuccess = response => {
+    console.log(response.code);
+    axios.post(`http://localhost:5000/42auth`, {code : response.code})
+  
+  }
+
+  const onFailure = response => console.error(response);
   // Hypertube auth 
   const [email, setEmail] = useState('');
   const [passwords, setPassword] = useState('')
@@ -81,7 +88,6 @@ function Login() {
     }
     )
   }
-
   // google auth 
   const handleGoogleOnClick = async (provider) => {
     const res = await socialMediaAuth(provider);
@@ -101,9 +107,6 @@ function Login() {
         console.log(res.data);
       })
     }
-  }
-  const handle42OnClick = async () => {
-
   }
   const classes = useStyles();
   return (
@@ -162,15 +165,22 @@ function Login() {
               </Grid>
             </Grid>
           </form>
-          <button onClick={() => handle42OnClick()}
-            >
-              Sign in with github
-            </button>
           <button onClick={() => handleGoogleOnClick(googleProvider)}>
             sign in with google
           </button>
         </div>
       </Container>
+      <OAuth2Login
+        id="auth-code-login-btn"
+        authorizationUrl="https://api.intra.42.fr/oauth/authorize"
+        clientId="7f1fe4f23776049319f73d74b48c2f99bfe8713c182a70ab051f52f3c21b2cdc"
+        redirectUri="http://localhost:3000/login"
+        responseType="code"
+        scope=""
+        buttonText="Sign in with 42"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+      />
     </div>
   );
 }

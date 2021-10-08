@@ -48,3 +48,21 @@ router.post('/updateMovie', async (req, res) => {
 			message: "Something bad happened"
 		})
       })
+
+router.get('/getOrCreateMovie', async (req, res) => {
+	if(req.body.movieId){
+		const movie =  await prisma.movies.findUnique({
+		  where : 
+		  {
+		    movieId : req.body.movie.movieId,
+		  }      
+		})
+		return res.send({
+		  movie : movie
+		})
+	}
+	else
+		return res.status(401).send({
+			message: "Something bad happened"
+		})
+      })

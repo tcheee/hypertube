@@ -23,11 +23,15 @@ model User {
 
 model Movies {
   id      Int     @id @default(autoincrement())
-  movieId   Int   
+  movie_id   Int   
   resolution    String?
   image_link    String?
-  lastTimewatch DateTime
-  isDownload Boolean
+  lasttime DateTime?
+  isdownload Boolean?
+  summary String?
+  title String?
+  rating String?
+  productionYear Int?
 }
 
 model Comment {
