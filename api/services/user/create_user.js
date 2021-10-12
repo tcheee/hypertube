@@ -14,7 +14,7 @@ async function createUser(user){
 	    password : password,
 	    username : user.userName,
 	    firstname : user.firstName,
-	    lastName : user.lastName,
+	    lastname : user.lastName,
 	  }
 	})
 }
