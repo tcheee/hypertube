@@ -125,6 +125,7 @@ function Login() {
       .then(res => {
         console.log(res);
         console.log(res.data);
+        history.push("home")
       })
     }
   }

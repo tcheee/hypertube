@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 
-const getOrCreate42 =  async (user42) => {
+const getOrCreate42 =  async (user42, image) => {
 //	var imageAsBase64 = fs.readFileSync(user42.image, 'base64');
 	console.log(user42)
 	await prisma.user.upsert({
@@ -10,7 +10,7 @@ const getOrCreate42 =  async (user42) => {
 		create: { 
 			email: user42.email, 
 			username : user42.username, 
-			image : imageAsBase64, 
+			image : image, 
 			lastname : user42.lastname, 
 			firstname : user42.firstname},
 	      })

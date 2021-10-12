@@ -11,6 +11,9 @@ const resend_password = require('../services/user/reset_password')
 const updateUser = require('../services/user/update_user')
 const auth42 = require('../services/auth/auth42')
 const getOrCreate42 = require('../services/user/get_or_create_42')
+const imagetoBase64 = require('../services/image/imagetoBase64')
+
+
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});
   });
@@ -60,11 +63,10 @@ router.post('/hypertubeauth', async (req, res) => {
 
 router.post('/42auth', async (req, res) => {
   if(req.body.code){
-    console.log(req.body.code)
     response = await auth42(req.body.code)
-    console.log("THIS IS A RESPONSE" + response.email)
     if(response !== -1){
-      await getOrCreate42(response)
+      const image = await imagetoBase64(response.image)
+      await getOrCreate42(response, image)
       return res.send({
         message : "User Successfully login",
         user : response,
@@ -85,22 +87,22 @@ router.post('/42auth', async (req, res) => {
 
 
 router.post('/googleauth', async (req, res) => {
-  const tokenIsValid = await checkToken(req.body.user.token, "google", req.body.user.email)
-  console.log(tokenIsValid)
- // const imageAsBase64 = fs.readFileSync(req.body.user.image, 'base64');
-  if(tokenIsValid){
-    console.log(req.body)
-    await getOrCreateGoogle(req.body.user.email, req.body.user.username, imageAsBase64)
-    return res.send({
-      message: "User Successfully Login",
-    });
-}
-  else 
-    return res.status(401).send({
-    message: "Token is not valid"
+    const imagebase64 = await imagetoBase64(req.body.user.image)
+    console.log("IMAGE IS" + imagebase64)
+    if(imagebase64 !== -1){
+      const user = await getOrCreateGoogle(req.body.user.email, req.body.user.username, imagebase64)
+      console.log(user)
+      return res.send({
+        provider: "google",
+        user : user,
+        message: "User Successfully Login",
+      });
+    }
+    else 
+      return res.status(401).send({
+      message: "Token is not valid"
+    })
   })
-})
-
 router.get('/users', async (req, res) => {
   const users = await getAllUser()
   return res.send({
