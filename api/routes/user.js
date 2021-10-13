@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+const axios = require('axios')
 const createUser = require('../services/user/create_user.js')
 const loginUser = require('../services/user/login_user')
 const getOrCreateGoogle = require('../services/user/get_or_create_google')
@@ -12,7 +13,49 @@ const updateUser = require('../services/user/update_user')
 const auth42 = require('../services/auth/auth42')
 const getOrCreate42 = require('../services/user/get_or_create_42')
 const imagetoBase64 = require('../services/image/imagetoBase64')
+const jwt = require("jsonwebtoken");
+require('dotenv').config()
 
+// Middleware
+const authMiddleware = async (req, res, next) => {
+  if(req.body.provider && req.body.secret && req.body.uuid){
+    if(req.body.provider === "google"){
+      await axios.post('https://oauth2.googleapis.com/tokeninfo?id_token=' + req.body.token)
+      .then((response) => {
+        if(response.status === 200)
+          next();
+      }).catch((error) => {
+        console.log(error)
+        res.status(401).send({message : error })
+      })
+    }
+    if(req.body.provider === "42"){
+      await  axios.get("https://api.intra.42.fr/v2/me", {
+        headers : {
+            'Authorization': `Bearer ${req.body.token}`
+        }
+    }).then((response) => {
+      if(response.status === 200)
+        next();
+    }).catch((error) => {
+      res.status(401).send({message : error })
+   })
+  }
+    if(req.body.provider === "hypertube"){
+      const result = await jwt.verify(req.body.token, process.env.ACCESS_TOKEN_SECRET)
+      console.log(x)
+      if(result.uuid === req.body.uuid){
+        next()
+      }
+      else{
+        res.status(401).send({message : "Middleware Auth Error, Please Sign in Again"})
+    }
+  }
+  }
+  else{
+    res.status(401).send({message: "You must provide an access token and the provider in order to access these ressources"})
+  }
+  }
 
 router.get('/', (req, res) => {
     res.json({msg: "all good, working as expected"});

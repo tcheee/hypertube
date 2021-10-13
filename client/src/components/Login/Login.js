@@ -49,7 +49,7 @@ function Login() {
       history.push("home")
     }).catch( error => {
       confirmAlert({
-        title: 'Email or Password incorect',
+        title: error + 'Email or Password incorect',
         message: 'Please try again',
         buttons: [
           {
@@ -87,7 +87,6 @@ function Login() {
       if (res.data.result) {
         localStorage.setItem('accessToken', res.data.accesstoken);
         localStorage.setItem('provider', res.data.provider);
-        console.log('user created');
      //   dispatch({type: 'SET_USER', payload: isAuth()});
         history.push("/home");
       }
