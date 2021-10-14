@@ -30,6 +30,15 @@ CREATE TABLE "Movies" (
 );
 
 -- CreateTable
+CREATE TABLE "MoviesSeen" (
+    "id" SERIAL NOT NULL,
+    "MovieId" INTEGER NOT NULL,
+    "UserId" TEXT NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "fromId" INTEGER NOT NULL,

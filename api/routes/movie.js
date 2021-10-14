@@ -18,7 +18,11 @@ router.post('/addMovie', async (req, res) => {
 				resolution: req.body.resolution,
 				image_link: req.body.image_link,
 				lastTimewatch: date,
-				isDownload: false
+				isDownload: false,
+				summary: req.body.summary,
+				title: req.body.title,
+				rating: req.body.rating,
+				productionYear: req.body.productionYear,
 			}    
 		})
 
@@ -48,6 +52,10 @@ router.post('/updateMovie', async (req, res) => {
 		    image_link: req.body.movie.image_link,
 		    lastTimewatch: req.body.movie.lastTimeWatch,
 		    isDownload: req.body.movie.isDownload,
+		    summary: req.body.summary,
+		    title: req.body.title,
+		    rating: req.body.rating,
+		    productionYear: req.body.productionYear,
 		  }      
 		})
 		return res.send({
@@ -65,7 +73,7 @@ router.get('/getOrCreateMovie', async (req, res) => {
 		const movie =  await prisma.movies.findUnique({
 		  where : 
 		  {
-		    movieId : req.body.movie.movieId,
+		    movieId : req.body.movieId,
 		  }      
 		})
 		return res.send({
@@ -77,5 +85,47 @@ router.get('/getOrCreateMovie', async (req, res) => {
 			message: "Something bad happened"
 		})
       })
+
+router.get('/movieIsSeen', async (req, res) => {
+	if(req.body.movieId){
+		const resp = await prisma.moviesSeen.findUnique({
+			where : {
+				MovieId : req.body.movieId,
+				UserId: req.body.uuid
+			}
+		})
+		if(resp){
+			return res.send({message: "Movie is seen", Seen: true})
+		}
+		else{
+			return res.send({ message: "Movie not seen", Seen: false})
+		}
+	}
+	else{
+		return res.status(401).send({
+			message: "We need a MovieId to perform this action"
+		})
+	}
+
+})
+
+router.post('/movieWatched', async (req, res) => {
+	if(req.body.movieId){
+		const resp = await prisma.moviesSeen.create({
+			data : {
+				MovieId : req.body.movieId,
+				UserId : req.body.uuid,
+			}
+		})
+		return res.send({
+			message : "Movies Seen Successfully created"
+		})
+	}
+	else{
+		return res.status(401).send({
+			message: "We need a MovieId to perform this action"
+		})
+	}
+})
 
 module.exports = router;

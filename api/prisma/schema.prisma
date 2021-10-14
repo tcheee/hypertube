@@ -36,6 +36,12 @@ model Movies {
   productionYear Int?
 }
 
+model MoviesSeen {
+  id    Int @id @default(autoincrement())
+  MovieId   Int
+  UserId    String
+}
+
 model Comment {
   id            Int     @id @default(autoincrement())
   from          User    @relation(fields: [fromId], references: [id])

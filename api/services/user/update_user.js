@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 const updateUser = async (user) => {
 	userUpdate = await prisma.user.update({
 		where: {
-		  id: user.id,
+		  uuid: user.uuid,
 		},
 		data: {
 		  firstname : user.firstname,

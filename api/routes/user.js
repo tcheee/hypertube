@@ -166,16 +166,6 @@ router.get('/usersId', async (req, res) => {
   })
 })
 
-router.post('/user/image', async (req, res) => {
-  console.log(req.body)
-  // store image in base64 and store in db
-  return (true);
-  // const users = await getAllUser()
-  // return res.send({
-  //   users : users
-  // })
-})
-
 router.post('/resetpassword', async (req, res) => {
   if(req.body.id && req.body.password){
     await resetPassword(req.body.id, req.body.password)

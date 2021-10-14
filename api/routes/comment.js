@@ -33,8 +33,6 @@ router.get('/commentsId', async (req, res) => {
 })
 
 router.post('/addComment', async (req, res) => {
-  console.log('Comment created')
-  console.log(req.body)
   if(req.body.comment){
     const resultCreation = await createComment(req.body.movieId, req.body.comment, req.body.userId)
     const resultGetComment = await getCommentsMovie(req.body.movieId)
