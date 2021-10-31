@@ -11,6 +11,8 @@ const updateUser = async (user) => {
 		  lastName : user.lastName,
 		  username: user.username,
 		  comments: user.comments,
+		  language: user.language,
+		  image: user.image,
 		},
 	})
 	return userUpdate

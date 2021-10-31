@@ -1,14 +1,9 @@
-import decode from 'jwt-decode';
-
 const isAuth = () => {
-    let user = null;
-    const token = localStorage.getItem('accessToken');
-    try {
-        user = decode(token);
-    } catch (err) {
-      return (false);
+    if(localStorage.getItem('uuid') !== undefined){
+      return true
     }
-    return (user);
-  };
+    else
+      return false
+  }
 
 export default isAuth;

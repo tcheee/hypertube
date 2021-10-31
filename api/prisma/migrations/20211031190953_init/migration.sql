@@ -6,7 +6,8 @@ CREATE TABLE "User" (
     "password" TEXT,
     "firstname" TEXT,
     "lastname" TEXT,
-    "username" TEXT,
+    "username" TEXT NOT NULL,
+    "language" TEXT NOT NULL DEFAULT E'English',
     "image" TEXT,
 
     PRIMARY KEY ("id")

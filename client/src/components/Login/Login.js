@@ -54,6 +54,7 @@ function Login() {
       console.log(res.data)
       localStorage.setItem('accessToken', res.data.user.token);
       localStorage.setItem('provider', res.data.provider);
+      localStorage.setItem('uuid', res.data.user.uuid);
       history.push("home")
     }).catch( error => {
       confirmAlert({
@@ -95,23 +96,25 @@ function Login() {
       if (res.data.result) {
         localStorage.setItem('accessToken', res.data.accesstoken);
         localStorage.setItem('provider', res.data.provider);
+        localStorage.setItem('uuid', res.data.provider.user.uuid);
      //   dispatch({type: 'SET_USER', payload: isAuth()});
         history.push("/home");
       }
     })
     .catch( error => {
-      console.log(error.response)
-      confirmAlert({
-        title: 'Email or Password incorect',
-        message: 'Please try again',
-        buttons: [
-          {
-            label: 'Ok',
-            onClick: () => {}
-          }
-        ]
+      if(error.response !== undefined){
+        confirmAlert({
+          title: 'Email or Password incorect',
+          message: 'Please try again',
+          buttons: [
+            {
+              label: 'Ok',
+              onClick: () => {}
+            }
+          ]
       });
     }
+  }
 
     )
   }
@@ -131,6 +134,7 @@ function Login() {
       .then(res => {
         console.log(res);
         console.log(res.data);
+        localStorage.setItem('uuid', res.data.user.uuid);
         history.push("home")
       })
     }

@@ -109,10 +109,10 @@ router.post('/42auth', async (req, res) => {
     response = await auth42(req.body.code)
     if(response !== -1){
       const image = await imagetoBase64(response.image)
-      await getOrCreate42(response, image)
+      user = await getOrCreate42(response, image)
       return res.send({
         message : "User Successfully login",
-        user : response,
+        user : user,
         provider : 42,
       })
     }

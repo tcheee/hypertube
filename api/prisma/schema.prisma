@@ -17,8 +17,9 @@ model User {
   password  String? 
   firstname String?
   lastname  String?
-  username  String?
+  username  String
   comments  Comment[]
+  language String @default("English")
   image String?
 }
 
