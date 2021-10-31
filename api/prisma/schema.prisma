@@ -12,7 +12,7 @@ generator client {
 
 model User {
   id        Int         @id @default(autoincrement())
-  uuid      String      @default(uuid())
+  uuid      String      @default(uuid()) @unique
   email     String      @unique
   password  String? 
   firstname String?
@@ -44,8 +44,8 @@ model MoviesSeen {
 
 model Comment {
   id            Int     @id @default(autoincrement())
-  from          User    @relation(fields: [fromId], references: [id])
-  fromId        Int
+  from          User    @relation(fields: [fromId], references: [uuid])
+  fromId        String
   movieId       String
   comment       String
 }

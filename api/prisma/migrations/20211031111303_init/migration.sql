@@ -41,12 +41,15 @@ CREATE TABLE "MoviesSeen" (
 -- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
-    "fromId" INTEGER NOT NULL,
+    "fromId" TEXT NOT NULL,
     "movieId" TEXT NOT NULL,
     "comment" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User.uuid_unique" ON "User"("uuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
@@ -55,4 +58,4 @@ CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 CREATE UNIQUE INDEX "Movies.hash_unique" ON "Movies"("hash");
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD FOREIGN KEY ("fromId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD FOREIGN KEY ("fromId") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
