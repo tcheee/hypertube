@@ -16,6 +16,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import OAuth2Login from 'react-simple-oauth2-login';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -33,6 +34,13 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  root: {
+    background: 'linear-gradient(45deg, #708090 30%, #FFFFFF 90%)',
+    border: 0,
+    borderRadius: 3,
+    color: 'white',
+    height: 48,
   },
 }));
 
@@ -199,7 +207,7 @@ function Login() {
             </Button>
           </Stack>
         </div>
-      </Container>
+        <Stack spacing={2} style={{marginTop: "10px"}}>
       <OAuth2Login
         id="auth-code-login-btn"
         authorizationUrl="https://api.intra.42.fr/oauth/authorize"
@@ -208,9 +216,12 @@ function Login() {
         responseType="code"
         scope=""
         buttonText="Sign in with 42"
+        className={classes.root}
         onSuccess={onSuccess}
         onFailure={onFailure}
       />
+          </Stack>
+      </Container>
     </div>
   );
 }
