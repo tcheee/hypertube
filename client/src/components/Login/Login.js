@@ -118,8 +118,7 @@ function Login() {
   // google auth 
   const handleGoogleOnClick = async (provider) => {
     const res = await socialMediaAuth(provider);
-    if (provider === googleProvider && res){
-      console.log(res)
+    if (provider === googleProvider && res.code !== "auth/popup-closed-by-user"){
       const user = {
         email : res.user.email,
         username : res.user.displayName,
