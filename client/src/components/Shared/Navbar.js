@@ -155,7 +155,13 @@ function Navbar() {
 
   const handleClickAccount = () => {
     handleMenuClose()
-    history.push(`/profile/${state.user.id}`)
+    const id = localStorage.getItem("uuid")
+    history.push(`/profile/` + id)
+  }
+
+  const handleClickUsers = () => {
+    handleMenuClose()
+    history.push(`/profiles`)
   }
 
   const handleClickLogout = () => {
@@ -177,6 +183,7 @@ function Navbar() {
         onClose={handleMenuClose}
       >
       <MenuItem onClick={handleClickAccount}>My Account</MenuItem>
+      <MenuItem onClick={handleClickUsers}> Users </MenuItem>
       <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
     </Menu>
   );
