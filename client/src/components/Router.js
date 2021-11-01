@@ -7,7 +7,8 @@ import Home from "./Home/Home"
 import Movie from "./Movie/Movie"
 import Profile from "./Profile/Profile"
 import isAuth from "../service/decodeToken"
-import Store from '../context/store'
+import Store from "../context/store"
+import Profiles from '../components/Profiles/Profiles'
 
   function PrivateRoute({ children, ...rest }) {
     return (
@@ -53,6 +54,9 @@ function App() {
                     </PrivateRoute>
                     <PrivateRoute path="/movie/:id">
                         <Movie />
+                    </PrivateRoute>
+                    <PrivateRoute path="/profiles">
+                      <Profiles/>
                     </PrivateRoute>
                 </Switch>
             </Store>

@@ -84,25 +84,25 @@ function Navbar() {
   const classes = useStyles();
   const history = useHistory();
   const [state, dispatch] = useContext(Context);
-  const [auth, setAuth] = useState(false);
+//  const [auth, setAuth] = useState(false);
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  useEffect(() => {
-    dispatch({type: 'SET_USER', payload: isAuth()});
-  }, []);
+//  useEffect(() => {
+//    dispatch({type: 'SET_USER', payload: isAuth()});
+//  }, []);
 
-  useEffect(() => {
-    if (state.user.id) {
-      setAuth(true);
-    }
-    else {
-      setAuth(false);
-    }
-  }, [state])
+//  useEffect(() => {
+//    if (state.user.id) {
+//      setAuth(true);
+//    }
+//    else {
+//      setAuth(false);
+ //   }
+ // }, [state])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -231,7 +231,7 @@ function Navbar() {
             🍿 Hypertube
             </Typography>
           </Link>
-          {auth && (<div className={classes.search}>
+          <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -247,9 +247,9 @@ function Navbar() {
               value = {search}
             />
             </form>
-          </div>)}
+          </div>
           <div className={classes.grow} />
-          {auth && ( <div className={classes.sectionDesktop}>
+          <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -260,7 +260,7 @@ function Navbar() {
             >
               <AccountCircle />
             </IconButton>
-          </div>)}
+          </div>
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
