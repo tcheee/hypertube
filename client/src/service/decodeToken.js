@@ -1,5 +1,5 @@
 const isAuth = () => {
-    if(localStorage.getItem('uuid') !== undefined){
+    if(localStorage.getItem('uuid')){
       return true
     }
     else
