@@ -5,8 +5,8 @@ const createUser = require('../services/user/create_user.js')
 const loginUser = require('../services/user/login_user')
 const getOrCreateGoogle = require('../services/user/get_or_create_google')
 const checkToken = require('../services/auth/check-token')
-const getAllUser = require('../services/user/get_user')
 const getUser = require('../services/user/get_user')
+const getAllUser = require('../services/user/get_all_user')
 const resetPassword = require('../services/user/reset_password')
 const resend_password = require('../services/user/reset_password')
 const updateUser = require('../services/user/update_user')
@@ -153,9 +153,11 @@ router.get('/users', async (req, res) => {
   })
 })
 
-router.get('/usersId', async (req, res) => {
-  if(req.body.id){
-    const user = await getUser(req.body.id)
+router.get('/userId', async (req, res) => {
+  console.log(req.query)
+  //console.log(res)
+  if(req.query.id){
+    const user = await getUser(req.query.id)
     return res.send({
       user : user
     })
