@@ -166,8 +166,8 @@ function Navbar() {
 
   const handleClickLogout = () => {
     handleMenuClose()
-    dispatch({type: 'DELETE_USER'});
-    localStorage.removeItem('accessToken');
+ //   dispatch({type: 'DELETE_USER'});
+    localStorage.clear();
     history.push(`/login`)
   }
 
