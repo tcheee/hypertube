@@ -12,11 +12,11 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import {useState, useEffect, useContext} from 'react'
-import {useHistory, Link} from 'react-router-dom' 
-import axios from 'axios'
-import {Context} from '../../context/store'
-import isAuth from "../../service/decodeToken"
+import { useState, useEffect, useContext, useRef } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import axios from 'axios';
+import { Context } from '../../context/store';
+import isAuth from '../../service/decodeToken';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: 'none',
-    color: "#E50914",
+    color: '#E50914',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
   },
   search: {
     position: 'relative',
-    align: "center",
+    align: 'center',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
@@ -84,25 +84,12 @@ function Navbar() {
   const classes = useStyles();
   const history = useHistory();
   const [state, dispatch] = useContext(Context);
-//  const [auth, setAuth] = useState(false);
+  //  const [auth, setAuth] = useState(false);
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-//  useEffect(() => {
-//    dispatch({type: 'SET_USER', payload: isAuth()});
-//  }, []);
-
-//  useEffect(() => {
-//    if (state.user.id) {
-//      setAuth(true);
-//    }
-//    else {
-//      setAuth(false);
- //   }
- // }, [state])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -123,65 +110,66 @@ function Navbar() {
 
   const handleTyping = (event) => {
     event.preventDefault();
-    setSearch(event.target.value)
-  }
+    setSearch(event.target.value);
+  };
 
   const handleSearch = (event) => {
     event.preventDefault();
     event.target.value = '';
-    dispatch({type: 'START_LOADING'});
-    axios.post('http://localhost:5000/api/movie/search', {
-      query: search,
-    })
-    .then(function (response) {
-      console.log(response.data)
-      console.log(state.loading)
-      dispatch({type: 'STOP_LOADING'});
-      history.push({
-        pathname: '/home',
-        search: '?q=' + search,
-        state: { result: response.data }
+    dispatch({ type: 'START_LOADING' });
+    axios
+      .post('http://localhost:5000/api/movie/search', {
+        query: search,
       })
-      setSearch('')
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+      .then(function (response) {
+        console.log(response.data);
+        console.log(state.loading);
+        dispatch({ type: 'STOP_LOADING' });
+        history.push({
+          pathname: '/home',
+          search: '?q=' + search,
+          state: { result: response.data },
+        });
+        setSearch('');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   if (state.error) {
-    console.log("There was an error while getting the state")
+    console.log('There was an error while getting the state');
   }
 
   const handleClickAccount = () => {
-    handleMenuClose()
-    const id = localStorage.getItem("uuid")
-    history.push(`/profile/` + id)
-  }
+    handleMenuClose();
+    const id = localStorage.getItem('uuid');
+    history.push(`/profile/` + id);
+  };
 
   const handleClickUsers = () => {
-    handleMenuClose()
-    history.push(`/profiles`)
-  }
+    handleMenuClose();
+    history.push(`/profiles`);
+  };
 
   const handleClickLogout = () => {
-    handleMenuClose()
- //   dispatch({type: 'DELETE_USER'});
+    handleMenuClose();
+    //   dispatch({type: 'DELETE_USER'});
     localStorage.clear();
-    history.push(`/login`)
-  }
+    history.push(`/login`);
+  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-      >
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
       <MenuItem onClick={handleClickAccount}>My Account</MenuItem>
       <MenuItem onClick={handleClickUsers}> Users </MenuItem>
       <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
@@ -233,9 +221,9 @@ function Navbar() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Link to="/home" style={{ textDecoration: 'none', color: '#FFF'  }}>
+          <Link to="/home" style={{ textDecoration: 'none', color: '#FFF' }}>
             <Typography className={classes.title} variant="h6" noWrap>
-            🍿 Hypertube
+              🍿 Hypertube
             </Typography>
           </Link>
           <div className={classes.search}>
@@ -243,16 +231,16 @@ function Navbar() {
               <SearchIcon />
             </div>
             <form onSubmit={handleSearch}>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={handleTyping}
-              value = {search}
-            />
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={handleTyping}
+                value={search}
+              />
             </form>
           </div>
           <div className={classes.grow} />
