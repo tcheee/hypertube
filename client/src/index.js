@@ -6,14 +6,13 @@ import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#221F1F",
+      main: '#221F1F',
     },
     secondary: {
-      main: "#E50914",
+      main: '#E50914',
     },
-  }
+  },
 });
-
 
 ReactDOM.render(
   <React.StrictMode>
