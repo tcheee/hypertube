@@ -10,18 +10,31 @@ import { useDropzone } from 'react-dropzone';
 import {Context} from '../../context/store'
 import axios from "axios"
 import useStyles from '../../styles/styles.js'
+import { useHistory ,useLocation } from 'react-router-dom';
 
 function Profile() {
   const classes = useStyles();
   const [state, dispatch] = useContext(Context);
-  let { id } = useParams()
-  const [editable, setEditable] = useState(false)
-
+  //let { id } = useParams()
+  const [editable, setEditable] = useState(false);
+  const [user, setUser] = useState();
+  // get uuid value from Url
+  const location = useLocation()
+  const id = location.pathname.replace("/profile/", "")
+  console.log(id)
+  // Check if form must be editable
   useEffect(() => {
-    if (parseInt(id,10) === parseInt(state.user.id)) {
+    axios.get("http://localhost:5000/userId", {params: {id : id} }).then(res => {
+      console.log(res)
+      console.log(res.data.user.username)
+		setUser(res.data.user.username);
+	});
+
+    if (id === localStorage.getItem("uuid")){
       setEditable(true);
     }
-  }, [state])
+   
+  }, []);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     console.log(acceptedFiles);
@@ -46,7 +59,7 @@ function Profile() {
               <TextField
                 className={classes.field}
                 autoComplete="fname"
-                name="firstName"
+                name="user"
                 variant="filled"
                 required
                 fullWidth
@@ -54,6 +67,7 @@ function Profile() {
                 label="First Name"
                 autoFocus
                 disabled={!editable}
+                defaultValue={user}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
