@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +16,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import OAuth2Login from 'react-simple-oauth2-login';
+import { Context } from '../../context/store';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Login() {
+  const [state, dispatch] = useContext(Context);
   // 42 auth
   const onSuccess = (response) => {
     console.log(response.code);
@@ -55,6 +57,7 @@ function Login() {
         localStorage.setItem('accessToken', res.data.user.token);
         localStorage.setItem('provider', res.data.provider);
         localStorage.setItem('uuid', res.data.user.uuid);
+        dispatch({ type: 'SET_LOGIN' });
         history.push('home');
       })
       .catch((error) => {
@@ -75,7 +78,6 @@ function Login() {
   // Hypertube auth
   const [email, setEmail] = useState('');
   const [passwords, setPassword] = useState('');
-  //const [state, dispatch] = useContext(Context);
   const history = useHistory();
 
   const onInputChangeEmail = (event) => {
@@ -99,7 +101,7 @@ function Login() {
           localStorage.setItem('accessToken', res.data.accesstoken);
           localStorage.setItem('provider', res.data.provider);
           localStorage.setItem('uuid', res.data.provider.user.uuid);
-          //   dispatch({type: 'SET_USER', payload: isAuth()});
+          dispatch({ type: 'SET_LOGIN' });
           history.push('/home');
         }
       })
@@ -137,6 +139,7 @@ function Login() {
         console.log(res);
         console.log(res.data);
         localStorage.setItem('uuid', res.data.user.uuid);
+        dispatch({ type: 'SET_LOGIN' });
         history.push('home');
       });
     }

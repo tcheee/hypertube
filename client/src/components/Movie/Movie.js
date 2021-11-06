@@ -173,7 +173,6 @@ function Movie() {
       .then((res) => {
         setComments(res.data.comments);
       });
-    //updateMovie(hash, location.state.id, resolution, location.state.img)
   }, []);
 
   useEffect(() => {
@@ -235,7 +234,7 @@ function Movie() {
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-              <video width="100%" controls crossOrigin="anonymous">
+              <video controls crossOrigin="anonymous">
                 <source
                   label="720p"
                   src={`http://localhost:5000/api/stream/${hash}`}
@@ -262,7 +261,7 @@ function Movie() {
             </TabPanel>
             <div className={classes.video}>
               <TabPanel value={value} index={1}>
-                <video width="100%" controls crossOrigin="anonymous">
+                <video controls crossOrigin="anonymous">
                   <source
                     label="1080p"
                     src={`http://localhost:5000/api/stream/${hash}`}
@@ -301,7 +300,7 @@ function Movie() {
           </div>
           {comments &&
             comments.map((comment) => (
-              <div className={classes.output}>
+              <div className={classes.output} key={comment.id}>
                 <p style={{ marginLeft: '15px', fontSize: '15px' }}>
                   <b>{comment.from.username} </b>: {comment.comment}
                 </p>
