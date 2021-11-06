@@ -14,6 +14,7 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Context } from '../../context/store';
+import isAuth from '../../service/decodeToken';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -85,6 +86,12 @@ function Navbar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  useEffect(() => {
+    isAuth()
+      ? dispatch({ type: 'SET_LOGIN' })
+      : dispatch({ type: 'SET_LOGOUT' });
+  }, []);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
