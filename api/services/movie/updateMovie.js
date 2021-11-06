@@ -1,20 +1,20 @@
-const { PrismaClient } = require("@prisma/client")
-const prisma = new PrismaClient()
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-
-async function updateMovie(id){
-	await prisma.movies.update({
-	where: {
-	   movieId: id,	
-	},
-	data : 
-	  {
-	    resolution: req.body.movie.resolution,
-	    image_link: req.body.movie.image_link,
-	    lastTimewatch: req.body.movie.lastTimeWatch,
-	    isDownload: req.body.movie.isDownload,
-	  }      
-	})
+async function setDownloadedMovie(id) {
+  try {
+    await prisma.movies.update({
+      where: {
+        movieId: id,
+      },
+      data: {
+        isDownload: true,
+      },
+    });
+    return true;
+  } catch (err) {
+    return false;
+  }
 }
 
-module.exports = updateMovie;
+module.exports = setDownloadedMovie;

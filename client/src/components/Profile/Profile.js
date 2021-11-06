@@ -38,11 +38,10 @@ function Profile() {
     setLoading(false);
 	});
 
-    if (id === localStorage.getItem("uuid")){
+    if (id === localStorage.getItem('uuid')) {
       setEditable(true);
     }
-   
-  }, []);
+  }, [user, id]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     console.log(acceptedFiles);
@@ -89,11 +88,9 @@ function Profile() {
                 defaultValue={user.firstname}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                className={classes.field}
-                variant="filled"
-                required
+            {editable && (
+              <Button
+                type="submit"
                 fullWidth
                 id="lastName"
                 label="Last Name"
