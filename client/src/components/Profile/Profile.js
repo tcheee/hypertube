@@ -65,7 +65,7 @@ function Profile() {
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
-              <input {...getInputProps()} webkitdirectory="" type="file"/>
+              <input {...getInputProps()} type="file"/>
               {user.image === "data:image/png;base64," &&
               <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>}
               {user.image !== null && 
@@ -88,9 +88,11 @@ function Profile() {
                 defaultValue={user.firstname}
               />
             </Grid>
-            {editable && (
-              <Button
-                type="submit"
+            <Grid item xs={12} sm={6}>
+              <TextField
+                className={classes.field}
+                variant="filled"
+                required
                 fullWidth
                 id="lastName"
                 label="Last Name"
