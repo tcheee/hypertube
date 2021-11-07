@@ -2,3 +2,5 @@
 ./api/modes/node_modules
 ./client/node_modules
 ./database/*
+./api/package-lock.json
+./client/package-lock.json

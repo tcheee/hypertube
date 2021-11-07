@@ -30,6 +30,13 @@ const useStyles = makeStyles((theme) => ({
     textColor: {
         color: "#E50914",
     },
+    MenuItem: {
+        '& div': {
+            // this is just an example, you can use vw, etc.
+            width: '350px',
+            backgroundColor: "rgba(255,255,255,0.9)",
+        }
+    }
 //     large:{
 //       width: theme.spacing(20),
 //       height: theme.spacing(20),

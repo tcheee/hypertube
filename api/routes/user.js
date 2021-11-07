@@ -14,6 +14,7 @@ const auth42 = require('../services/auth/auth42')
 const getOrCreate42 = require('../services/user/get_or_create_42')
 const imagetoBase64 = require('../services/image/imagetoBase64')
 const jwt = require("jsonwebtoken");
+const updateImage = require('../services/image/updateImage')
 require('dotenv').config()
 
 // Middleware
@@ -62,7 +63,6 @@ router.get('/', (req, res) => {
   });
 
 router.post('/login', async (req, res) => {
-  console.log("LOGIN TRY")
   if(req.body.user){
     const result = await loginUser(req.body.user)
     if(result != "-1"){
@@ -131,7 +131,6 @@ router.post('/42auth', async (req, res) => {
 
 router.post('/googleauth', async (req, res) => {
     const imagebase64 = await imagetoBase64(req.body.user.image)
-    console.log("IMAGE IS" + imagebase64)
     if(imagebase64 !== -1){
       const user = await getOrCreateGoogle(req.body.user.email, req.body.user.username, imagebase64)
       console.log(user)
@@ -209,5 +208,21 @@ router.patch('/updateUser', async (req, res) => {
   })
 })
 
+router.post('/updateimage', async (req, res) => {
+	console.log("Pass")
+	console.log(req.body.image[0].path)
+	console.log(req.body.uuid)
+  if(req.body.image){
+		res = await updateImage(req.body.image[0].path, req.body.uuid)
+		if(res !== -1){
+			return res.send({
+				message : "User Successfully updated",
+				user :res,
+		})
+	}}
+		else{
+			res.status(401).send({message : "We need a new image to perfom this action"})
+		}
+})
 
 module.exports = router
