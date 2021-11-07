@@ -1,14 +1,13 @@
-const { PrismaClient } = require("@prisma/client")
-const prisma = new PrismaClient()
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-
-async function isDownloadMovie(id){
-	const movie = await prisma.movies.findUnique({
-	where: {
-	   movieId: id,	
-	},
-})
-	return movie.isDownload
+async function isDownloadMovie(hash) {
+  const movie = await prisma.movies.findUnique({
+    where: {
+      hash: hash,
+    },
+  });
+  return movie.isDownload;
 }
 
 module.exports = isDownloadMovie;

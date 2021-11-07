@@ -1,11 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function setDownloadedMovie(id) {
+async function setDownloadedMovie(hash) {
   try {
     await prisma.movies.update({
       where: {
-        movieId: id,
+        hash: hash,
       },
       data: {
         isDownload: true,

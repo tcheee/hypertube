@@ -38,9 +38,9 @@ model Movies {
 }
 
 model MoviesSeen {
-  id    Int @id @default(autoincrement())
-  MovieId   Int
-  UserId    String
+  id        Int @id @default(autoincrement())
+  movieid   String
+  userid    String
 }
 
 model Comment {

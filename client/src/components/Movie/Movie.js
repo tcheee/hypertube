@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#b3b3b3',
   },
   comment: {
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(1),
   },
   inputComment: {
     color: 'white',
@@ -56,15 +57,25 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   video: {
+    position: 'relative',
     width: '1000px',
+    height: '400px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginTop: '30px',
   },
   textContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '1000px',
+  },
+  videoDiv: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
 }));
 
@@ -137,8 +148,6 @@ function Movie() {
   const [comment, setComment] = useState(null);
   const [magnet, setMagnet] = useState(null);
   const [playing, setPlaying] = useState(false);
-  const [launchDownload, setLaunchDownload] = useState(false);
-  const [downloading, setDownloading] = useState(false);
   const [resolution, setResolution] = useState('720p');
   const [hash, setHash] = useState(null);
   const location = useLocation();
@@ -172,6 +181,15 @@ function Movie() {
       })
       .then((res) => {
         setComments(res.data.comments);
+      });
+
+    axios
+      .post(`http://localhost:5000/setMovieSeen`, {
+        movieId: location.state.id,
+        uuid: localStorage.getItem('uuid'),
+      })
+      .then((res) => {
+        console.log(res);
       });
   }, []);
 
@@ -233,64 +251,77 @@ function Movie() {
                 />
               </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
-              <video controls crossOrigin="anonymous">
-                <source
-                  label="720p"
-                  src={`http://localhost:5000/api/stream/${hash}`}
-                />
-                <track
-                  label="English"
-                  kind="subtitles"
-                  srcLang="en"
-                  src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
-                />
-                <track
-                  label="French"
-                  kind="subtitles"
-                  srcLang="fr"
-                  src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
-                />
-                <track
-                  label="Spanish"
-                  kind="subtitles"
-                  srcLang="es"
-                  src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
-                />
-              </video>
-            </TabPanel>
-            <div className={classes.video}>
-              <TabPanel value={value} index={1}>
-                <video controls crossOrigin="anonymous">
-                  <source
-                    label="1080p"
-                    src={`http://localhost:5000/api/stream/${hash}`}
-                  />
-                  <track
-                    label="English"
-                    kind="subtitles"
-                    srcLang="en"
-                    src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
-                  />
-                  <track
-                    label="French"
-                    kind="subtitles"
-                    srcLang="fr"
-                    src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
-                  />
-                  <track
-                    label="Spanish"
-                    kind="subtitles"
-                    srcLang="es"
-                    src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
-                  />
-                </video>
-              </TabPanel>
-            </div>
+            {resolution === '720p' ? (
+              <div className={classes.video}>
+                <TabPanel value={value} index={0}>
+                  <video
+                    controls
+                    crossOrigin="anonymous"
+                    className={classes.videoDiv}
+                  >
+                    <source
+                      label="720p"
+                      src={`http://localhost:5000/api/stream/${hash}`}
+                    />
+                    <track
+                      label="English"
+                      kind="subtitles"
+                      srcLang="en"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
+                    />
+                    <track
+                      label="French"
+                      kind="subtitles"
+                      srcLang="fr"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
+                    />
+                    <track
+                      label="Spanish"
+                      kind="subtitles"
+                      srcLang="es"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
+                    />
+                  </video>
+                </TabPanel>
+              </div>
+            ) : (
+              <div className={classes.video}>
+                <TabPanel value={value} index={1}>
+                  <video
+                    controls
+                    crossOrigin="anonymous"
+                    className={classes.videoDiv}
+                  >
+                    <source
+                      label="1080p"
+                      src={`http://localhost:5000/api/stream/${hash}`}
+                    />
+                    <track
+                      label="English"
+                      kind="subtitles"
+                      srcLang="en"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
+                    />
+                    <track
+                      label="French"
+                      kind="subtitles"
+                      srcLang="fr"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
+                    />
+                    <track
+                      label="Spanish"
+                      kind="subtitles"
+                      srcLang="es"
+                      src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
+                    />
+                  </video>
+                </TabPanel>
+              </div>
+            )}
           </Box>
         </div>
         <div>
-          <div>
+          <div className={classes.comment}>
             <input
               placeholder="Give your opiniong about the movie"
               className={classes.input}

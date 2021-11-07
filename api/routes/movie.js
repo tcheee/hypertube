@@ -8,7 +8,7 @@ router.post('/addMovie', async (req, res) => {
   const date = Date.now();
 
   if (req.body.hash) {
-    const result = await prisma.movies.upsert({
+    await prisma.movies.upsert({
       where: { hash: req.body.hash },
       update: { lastTimewatch: date },
       create: {
@@ -24,9 +24,6 @@ router.post('/addMovie', async (req, res) => {
         productionYear: req.body.productionYear,
       },
     });
-
-    console.log(result);
-
     return res.status(200).send({
       result: true,
       message: 'Movie Created',
@@ -100,20 +97,26 @@ router.get('/movieIsSeen', async (req, res) => {
   }
 });
 
-router.post('/movieWatched', async (req, res) => {
-  if (req.body.movieId) {
-    const resp = await prisma.moviesSeen.create({
-      data: {
-        MovieId: req.body.movieId,
-        UserId: req.body.uuid,
-      },
-    });
-    return res.send({
-      message: 'Movies Seen Successfully created',
-    });
-  } else {
-    return res.status(401).send({
-      message: 'We need a MovieId to perform this action',
+router.post('/setMovieSeen', async (req, res) => {
+  try {
+    if (req.body.movieId) {
+      const watch = await prisma.moviesSeen.upsert({
+        data: {
+          movieid: req.body.movieId,
+          userid: req.body.uuid,
+        },
+      });
+      return res.send({
+        message: 'Movies Seen Successfully created',
+      });
+    } else {
+      return res.status(401).send({
+        message: 'We need a MovieId to perform this action',
+      });
+    }
+  } catch (err) {
+    return res.status(500).send({
+      message: 'Error while performing the action',
     });
   }
 });

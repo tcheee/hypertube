@@ -6,6 +6,8 @@ const appDir = path.dirname(require.main.filename);
 const { PassThrough } = require('stream');
 const checkConversion = require('./checkConversion');
 const isVideoFile = require('./isVideoFile');
+const setDownloadedMovie = require('../movie/setDownloadedMovie');
+const isDownloadMovie = require('../movie/isDownloadMovie');
 
 async function downdloadMovie(pipeDownload, pathName) {
   const write = fs.createWriteStream(pathName);
@@ -111,19 +113,12 @@ async function launchStreamTorrent(res, hash, range, pathName) {
 
   streaming_engine.on('idle', () => {
     console.log('Movie should be downloaded, I will disappear!');
-    console.log(
-      'Completed : ' +
-        ((parseInt(pieces.length, 10) / parseInt(numPieces, 10)) * 100 + '%')
-    );
+    const stat = fs.statSync(pathName);
+    const fileSize = stat.size;
 
-    // if (
-    //   parseInt(pieces.length, 10) / parseInt(numPieces, 10) === 1 ||
-    //   parseInt(pieces.length, 10) / parseInt(numPieces, 10) > 0.95
-    // ) {
-    //   // put in the db that the movie is fully donwload + imdb
-    // }
-    // when near to 100%, store in db that the movie was downloaded with: idmb + resolution
-
+    if (fileSize >= size) {
+      setDownloadedMovie(hash);
+    }
     streaming_engine.remove(true, () => {
       console.log('Engine cleared');
     });
@@ -141,7 +136,7 @@ async function handleStreaming(req, res) {
 
   try {
     const stat = fs.statSync(pathName);
-    if (stat.size > 0) {
+    if (isDownloadMovie(hash) && stat.size > 0) {
       launchStreamFS(pathName, range, res, stat.size);
       return;
     } else {

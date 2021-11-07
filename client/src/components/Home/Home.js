@@ -2,7 +2,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
-import Notecard from '../Shared/Notecard';
+import Notecard from './Notecard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -108,14 +108,16 @@ function Home() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const fetchMovies = (category, page) => {
+  const fetchMovies = (category, page, uuid) => {
     setError(false);
     dispatch({ type: 'START_LOADING' });
     fetch(
       'http://localhost:5000/api/movie/trending?category=' +
         category.toLowerCase() +
         '&page=' +
-        page
+        page +
+        '&uuid=' +
+        localStorage.getItem('uuid')
     )
       .then((res) => {
         return res.json();
@@ -124,14 +126,16 @@ function Home() {
         dispatch({ type: 'STOP_LOADING' });
         console.log(data);
         setPages(data.count);
-        const result = data.movies.filter(
-          (movie) =>
-            movie.rating >= rating[0] &&
-            movie.rating <= rating[1] &&
-            movie.year >= productionYear[0] &&
-            movie.year <= productionYear[1]
-        );
-        setMovies(sortMovie(sorting, result));
+        if (data.movies) {
+          const result = data.movies.filter(
+            (movie) =>
+              movie.rating >= rating[0] &&
+              movie.rating <= rating[1] &&
+              movie.year >= productionYear[0] &&
+              movie.year <= productionYear[1]
+          );
+          setMovies(sortMovie(sorting, result));
+        }
       });
   };
 
