@@ -32,7 +32,6 @@ function Profile() {
   // Check if form must be editable
   useEffect(() => {
     axios.get("http://localhost:5000/userId", {params: {id : id} }).then(res => {
-      console.log(res.data.user)
 		setUser(res.data.user);
     setImage("data:image/png;base64," + res.data.user.image )
     setLoading(false);
@@ -41,7 +40,7 @@ function Profile() {
     if (id === localStorage.getItem('uuid')) {
       setEditable(true);
     }
-  }, [user, id]);
+  }, []);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     console.log(acceptedFiles);
