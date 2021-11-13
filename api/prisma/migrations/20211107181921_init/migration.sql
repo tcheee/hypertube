@@ -33,8 +33,8 @@ CREATE TABLE "Movies" (
 -- CreateTable
 CREATE TABLE "MoviesSeen" (
     "id" SERIAL NOT NULL,
-    "MovieId" INTEGER NOT NULL,
-    "UserId" TEXT NOT NULL,
+    "movieid" TEXT NOT NULL,
+    "userid" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );

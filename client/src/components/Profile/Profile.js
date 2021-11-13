@@ -29,19 +29,16 @@ function Profile() {
 
   // Check if form must be editable
   useEffect(() => {
-    axios
-      .get('http://localhost:5000/userId', { params: { id: id } })
-      .then((res) => {
-        console.log(res.data.user);
-        setUser(res.data.user);
-        setImage('data:image/png;base64,' + res.data.user.image);
-        setLoading(false);
-      });
+    axios.get("http://localhost:5000/userId", {params: {id : id} }).then(res => {
+		setUser(res.data.user);
+    setImage("data:image/png;base64," + res.data.user.image )
+    setLoading(false);
+	});
 
     if (id === localStorage.getItem('uuid')) {
       setEditable(true);
     }
-  }, [user, id]);
+  }, []);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     console.log(acceptedFiles);
@@ -67,21 +64,11 @@ function Profile() {
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
-            <input {...getInputProps()} webkitdirectory="" type="file" />
-            {user.image === 'data:image/png;base64,' && (
-              <Avatar
-                style={{ width: 100, height: 100, cursor: 'pointer' }}
-                alt="Remy Sharp"
-                src="https://via.placeholder.com/100"
-              />
-            )}
-            {user.image !== null && (
-              <Avatar
-                style={{ width: 100, height: 100, cursor: 'pointer' }}
-                alt="Remy Sharp"
-                src={image}
-              />
-            )}
+              <input {...getInputProps()} type="file"/>
+              {user.image === "data:image/png;base64," &&
+              <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>}
+              {user.image !== null && 
+              <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp"  src={image}/> }
           </div>
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
@@ -175,9 +162,11 @@ function Profile() {
                 </Grid>
               )}
             </Grid>
-            {editable && (
-              <Button
-                type="submit"
+            <Grid item xs={12} sm={6}>
+              <TextField
+                className={classes.field}
+                variant="filled"
+                required
                 fullWidth
                 variant="contained"
                 className={classes.submit}
