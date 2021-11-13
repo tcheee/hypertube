@@ -15,11 +15,9 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MuiThemeProvider theme={theme}>
-      <Router />
-    </MuiThemeProvider>
-  </React.StrictMode>,
+  <MuiThemeProvider theme={theme}>
+    <Router />
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
 
