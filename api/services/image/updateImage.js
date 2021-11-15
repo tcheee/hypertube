@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 const updateImage = async (image, uuid) => {
 	try {
-		const imagebase64 = await imagetoBase64(image)
+		const imagebase64 = await imagetoBase64(image, true)
 		userUpdate = await prisma.user.update({
 			where : {
 				uuid: uuid

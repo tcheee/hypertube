@@ -108,7 +108,7 @@ router.post('/42auth', async (req, res) => {
   if(req.body.code){
     response = await auth42(req.body.code)
     if(response !== -1){
-      const image = await imagetoBase64(response.image)
+      const image = await imagetoBase64(response.image, false)
       user = await getOrCreate42(response, image)
       return res.send({
         message : "User Successfully login",
@@ -130,7 +130,7 @@ router.post('/42auth', async (req, res) => {
 
 
 router.post('/googleauth', async (req, res) => {
-    const imagebase64 = await imagetoBase64(req.body.user.image)
+    const imagebase64 = await imagetoBase64(req.body.user.image, false)
     if(imagebase64 !== -1){
       const user = await getOrCreateGoogle(req.body.user.email, req.body.user.username, imagebase64)
       console.log(user)
