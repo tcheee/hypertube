@@ -100,7 +100,20 @@ router.get('/movieIsSeen', async (req, res) => {
 router.post('/setMovieSeen', async (req, res) => {
   try {
     if (req.body.movieId) {
-      const watch = await prisma.moviesSeen.upsert({
+      const watch = await prisma.moviesSeen.findMany({
+        where: {
+          movieid: req.body.movieId,
+          userid: req.body.uuid,
+        },
+      });
+
+      if (watch.length > 0 && watch[0]) {
+        return res.send({
+          message: 'Movies already seen',
+        });
+      }
+
+      await prisma.moviesSeen.create({
         data: {
           movieid: req.body.movieId,
           userid: req.body.uuid,
@@ -115,6 +128,7 @@ router.post('/setMovieSeen', async (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).send({
       message: 'Error while performing the action',
     });
