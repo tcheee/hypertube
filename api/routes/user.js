@@ -16,7 +16,6 @@ const imagetoBase64 = require('../services/image/imagetoBase64')
 const jwt = require("jsonwebtoken");
 const updateImage = require('../services/image/updateImage')
 require('dotenv').config()
-
 // Middleware
 const authMiddleware = async (req, res, next) => {
   if(req.body.provider && req.body.secret && req.body.uuid){
@@ -210,14 +209,12 @@ router.patch('/updateUser', async (req, res) => {
 
 router.post('/updateimage', async (req, res) => {
 	console.log("Pass")
-	console.log(req.body.image[0].path)
-	console.log(req.body.uuid)
   if(req.body.image){
-		res = await updateImage(req.body.image[0].path, req.body.uuid)
+		user = await updateImage(req.body.image, req.body.uuid)
 		if(res !== -1){
 			return res.send({
 				message : "User Successfully updated",
-				user :res,
+				user :user,
 		})
 	}}
 		else{
