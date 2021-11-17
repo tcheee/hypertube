@@ -1,7 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import Container from '@material-ui/core/Container';
 import axios from "axios"
 import { useHistory } from "react-router-dom";
 

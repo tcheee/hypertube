@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import React, { useState, useEffect, useCallback} from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from "axios"
 import useStyles from '../../styles/styles.js'
@@ -12,7 +12,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { makeStyles } from '@material-ui/core';
 
 
 function Profile() {
@@ -23,24 +22,45 @@ function Profile() {
   const [isLoading, setLoading] = useState(true);
   const [language, setLanguage] = useState('');
   const [image, setImage] = useState('')
-
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   // get uuid value from Url
   const location = useLocation()
   const id = location.pathname.replace("/profile/", "")
 
+
+// take input change value and store in State
+const onInputChangeFirstName = (event) => {
+  setFirstName(event.target.value);
+ }
+ const onInputChangeLastName = (event) => {
+  setLastName(event.target.value);
+ }
+ const onInputChangeUserName = (event) => {
+  setUserName(event.target.value);
+ }
+ const onInputChangeEmail = (event) => {
+  setEmail(event.target.value);
+ }  
 
   // Check if form must be editable
   useEffect(() => {
     axios.get("http://localhost:5000/userId", {params: {id : id} }).then(res => {
 		setUser(res.data.user);
     setImage("data:image/png;base64," + res.data.user.image )
+    setLanguage(res.data.user.language)
+    setFirstName(res.data.user.firstname)
+    setLastName(res.data.user.lastname)
+    setUserName(res.data.user.email)
     setLoading(false);
 	});
 
     if (id === localStorage.getItem('uuid')) {
       setEditable(true);
     }
-  }, []);
+  }, [id]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     // convert to base64
@@ -51,7 +71,7 @@ function Profile() {
       image: image,
       uuid: id,
     }).then(res => console.log(res.data.user))
-  }, []);
+  }, [id]);
 
 
   const convertBase64 = (file) => {
@@ -69,9 +89,6 @@ function Profile() {
     });
   };
 
-
-
-
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   
   // is State Loading else render nothing
@@ -82,6 +99,18 @@ function Profile() {
   const handleChange = (event) => {
     setLanguage(event.target.value);
   };
+
+
+   // Submit Form
+   const onSubmit = (event) => {
+    event.preventDefault();
+    console.log(firstName)
+    console.log(lastName)
+    console.log(email)
+    console.log(userName)
+    console.log("SUBMIT")
+  }
+
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -93,7 +122,7 @@ function Profile() {
               {user.image !== null && 
               <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp"  src={image}/> }
           </div>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={onSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -108,6 +137,7 @@ function Profile() {
                 autoFocus
                 disabled={!editable}
                 defaultValue={user.firstname}
+                onChange={onInputChangeFirstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -122,6 +152,7 @@ function Profile() {
                 autoComplete="lname"
                 disabled={!editable}
                 defaultValue={user.lastname}
+                onChange={onInputChangeLastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -136,6 +167,7 @@ function Profile() {
                 autoComplete="username"
                 disabled={!editable}
                 defaultValue={user.username}
+                onChange={onInputChangeUserName}
               />
             </Grid>
             {editable && <Grid item xs={12}>
@@ -149,6 +181,7 @@ function Profile() {
                 name="email"
                 autoComplete="email"
                 defaultValue={user.email}
+                onChange={onInputChangeEmail}
               />
             </Grid>}
             <FormControl sx={{ m: 1, minWidth: 350 }}>
@@ -162,24 +195,11 @@ function Profile() {
             autoWidth
             label="Age"
             >
-            <MenuItem value={20}>English</MenuItem>
-            <MenuItem value={21}>French</MenuItem>
-            <MenuItem value={22}>Spanish</MenuItem>
+            <MenuItem value={"English"}>English</MenuItem>
+            <MenuItem value={"French"}>French</MenuItem>
+            <MenuItem value={"Spanish"}>Spanish</MenuItem>
             </Select>
             </FormControl>
-            {editable && <Grid item xs={12}>
-              <TextField
-                className={classes.field}
-                variant="filled"
-                required
-                fullWidth
-                name="password"
-                label="Change Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>}
           </Grid>
             {editable && <Button
               type="submit"
