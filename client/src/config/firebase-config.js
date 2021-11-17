@@ -1,5 +1,6 @@
-import firebase from "firebase";
-
+import firebase from "firebase/app";
+import 'firebase/analytics';
+import 'firebase/auth';
 const firebaseConfig = {
 	apiKey: "AIzaSyAJKsBTdIhiap4N_TFlOCHDZnTLVstIzdc",
 	authDomain: "hypertube-4e9e0.firebaseapp.com",
