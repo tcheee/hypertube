@@ -136,13 +136,15 @@ async function handleStreaming(req, res) {
 
   try {
     const stat = fs.statSync(pathName);
-    if (isDownloadMovie(hash) && stat.size > 0) {
+    const checkDownload = await isDownloadMovie(hash);
+    if (checkDownload && stat.size > 0) {
       launchStreamFS(pathName, range, res, stat.size);
       return;
     } else {
       launchStreamTorrent(res, hash, range, pathName);
     }
   } catch (err) {
+    console.log(err);
     launchStreamTorrent(res, hash, range, pathName);
   }
 }
