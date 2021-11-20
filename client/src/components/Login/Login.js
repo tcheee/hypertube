@@ -50,11 +50,9 @@ function Login() {
 
   // 42 auth
   const onSuccess = (response) => {
-    console.log(response.code);
     axios
       .post(`http://localhost:5000/42auth`, { code: response.code })
       .then((res) => {
-        console.log(res.data);
         localStorage.setItem('accessToken', res.data.user.token);
         localStorage.setItem('provider', res.data.provider);
         localStorage.setItem('uuid', res.data.user.uuid);
@@ -97,9 +95,6 @@ function Login() {
     axios
       .post(`http://localhost:5000/login`, { user })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        console.log(res.data.result);
         if (res.data.result === true) {
           localStorage.setItem('accessToken', res.data.accesstoken);
           localStorage.setItem('provider', res.data.provider);

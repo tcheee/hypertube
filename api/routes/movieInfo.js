@@ -4,7 +4,6 @@ const getTrendingMovie = require('../services/movie/trendingMovie');
 const getMovieSearch = require('../services/movie/movieSearch');
 
 router.get('/api/movie/trending', async (req, res) => {
-  console.log('uuid is : ' + req.query.uuid);
   const result = await getTrendingMovie(
     req.query.category,
     req.query.page,

@@ -63,7 +63,6 @@ const categories = [
 ];
 
 const sortMovie = (type, object) => {
-  console.log(type);
   if (type === 'name') {
     object.sort(function (a, b) {
       if (a.title > b.title) {
@@ -74,7 +73,6 @@ const sortMovie = (type, object) => {
       }
       return 0;
     });
-    console.log(object);
   }
   if (type === 'rating') {
     object.sort(function (a, b) {
@@ -82,7 +80,6 @@ const sortMovie = (type, object) => {
     });
   }
   if (type === 'year') {
-    console.log('sorting');
     object.sort(function (a, b) {
       return b.year - a.year;
     });
@@ -124,7 +121,6 @@ function Home() {
       })
       .then((data) => {
         dispatch({ type: 'STOP_LOADING' });
-        console.log(data);
         setPages(data.count);
         if (data.movies) {
           const result = data.movies.filter(
@@ -144,9 +140,6 @@ function Home() {
       fetchMovies('');
     } else {
       let data = location.state.result;
-      console.log(data);
-      console.log(state);
-      console.log(data.error);
       if (data.error) {
         setMovies([]);
         setError(true);

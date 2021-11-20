@@ -125,8 +125,6 @@ function Navbar() {
         query: search,
       })
       .then(function (response) {
-        console.log(response.data);
-        console.log(state.loading);
         dispatch({ type: 'STOP_LOADING' });
         history.push({
           pathname: '/home',

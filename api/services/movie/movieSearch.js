@@ -4,7 +4,6 @@ const isWatchedMovie = require('./isWatchedMovie');
 
 function movieSearch(search, uuid) {
   return new Promise(async (resolve, reject) => {
-    console.log(search);
     const encoded = encodeURI(search);
     axios
       .get(

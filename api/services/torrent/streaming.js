@@ -20,11 +20,7 @@ async function launchStreaming(engine, file, range, res, pathName) {
   const end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
   const videoFileType = checkConversion(file.name);
 
-  console.log(file);
-
   if (!videoFileType) {
-    console.log(file.name);
-    console.log(videoFileType);
     res.json({ err: 'uknown format for the available file' });
     return;
   }
@@ -86,7 +82,6 @@ async function launchStreamTorrent(res, hash, range, pathName) {
   let numPieces;
   let size = 0;
   let pieces = [];
-  console.log('new request is done HERE !!!!!!');
 
   streaming_engine.on('ready', function () {
     streaming_engine.files.forEach(function (file) {
@@ -98,21 +93,16 @@ async function launchStreamTorrent(res, hash, range, pathName) {
   });
 
   streaming_engine.on('torrent', (data) => {
-    console.log('event metadata are fetched!');
-    console.log(data);
-    console.log(size);
     if (!numPieces) {
       numPieces = pieces.length;
     }
   });
 
   streaming_engine.on('download', (index) => {
-    console.log(size);
     pieces.push(index);
   });
 
   streaming_engine.on('idle', () => {
-    console.log('Movie should be downloaded, I will disappear!');
     const stat = fs.statSync(pathName);
     const fileSize = stat.size;
 

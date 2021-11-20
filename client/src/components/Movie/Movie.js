@@ -132,7 +132,6 @@ function postComment(movieId, comment, userId) {
         userId,
       })
       .then((res) => {
-        console.log(res);
         resolve(res.data.comments);
       });
   });
@@ -157,8 +156,6 @@ function Movie() {
   if (location.state && magnet == null) {
     setTitle(location.state.name);
     setSummary(location.state.summary);
-    console.log(location.state);
-    console.log(location.state.torrents);
     const torrents = location.state.torrents;
     torrents.map((torrent) => {
       if (torrent.quality === resolution) {
