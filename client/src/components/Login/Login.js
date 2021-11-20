@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Login() {
   const [state, dispatch] = useContext(Context);
+
   // 42 auth
   const onSuccess = (response) => {
     console.log(response.code);
@@ -147,105 +148,108 @@ function Login() {
   const classes = useStyles();
 
   if (state.login) {
-    history.push('home');
-    return <div></div>;
-  }
-
-  return (
-    <div>
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h5" className={classes.textColor}>
-            Sign in to Hypertube
-          </Typography>
-          <form className={classes.form} onSubmit={onSubmit} noValidate>
-            <TextField
-              className={classes.field}
-              variant="filled"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              type="email"
-              onChange={onInputChangeEmail}
-              autoFocus
-            />
-            <TextField
-              className={classes.field}
-              variant="filled"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={onInputChangePassword}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className={classes.submit}
-              style={{ backgroundColor: '#E50914', color: 'white' }}
+    return <Redirect push to="/home" />;
+  } else {
+    return (
+      <div>
+        <Container component="main" maxWidth="xs">
+          <div className={classes.paper}>
+            <Typography
+              component="h1"
+              variant="h5"
+              className={classes.textColor}
             >
-              Sign In
-            </Button>
+              Sign in to Hypertube
+            </Typography>
+            <form className={classes.form} onSubmit={onSubmit} noValidate>
+              <TextField
+                className={classes.field}
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                type="email"
+                onChange={onInputChangeEmail}
+                autoFocus
+              />
+              <TextField
+                className={classes.field}
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={onInputChangePassword}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                className={classes.submit}
+                style={{ backgroundColor: '#E50914', color: 'white' }}
+              >
+                Sign In
+              </Button>
 
-            <Grid container>
-              <Grid item xs>
-                <Link
-                  to="/reset-password"
-                  variant="body2"
-                  style={{ textDecoration: 'none' }}
-                >
-                  Forgot password?
-                </Link>
+              <Grid container>
+                <Grid item xs>
+                  <Link
+                    to="/reset-password"
+                    variant="body2"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    to="/register"
+                    variant="body2"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link
-                  to="/register"
-                  variant="body2"
-                  style={{ textDecoration: 'none' }}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
-          <Divider style={{ color: 'white', marginTop: '10px' }}>OR</Divider>
+            </form>
+            <Divider style={{ color: 'white', marginTop: '10px' }}>OR</Divider>
+            <Stack spacing={2} style={{ marginTop: '10px' }}>
+              <Button
+                variant="outlined"
+                style={{ backgroundColor: '#f3f3f3', color: 'red' }}
+                startIcon={<GoogleIcon />}
+                onClick={() => handleGoogleOnClick(googleProvider)}
+              >
+                Sign in with Google
+              </Button>
+            </Stack>
+          </div>
           <Stack spacing={2} style={{ marginTop: '10px' }}>
-            <Button
-              variant="outlined"
-              style={{ backgroundColor: '#f3f3f3', color: 'red' }}
-              startIcon={<GoogleIcon />}
-              onClick={() => handleGoogleOnClick(googleProvider)}
-            >
-              Sign in with Google
-            </Button>
+            <OAuth2Login
+              id="auth-code-login-btn"
+              authorizationUrl="https://api.intra.42.fr/oauth/authorize"
+              clientId="7f1fe4f23776049319f73d74b48c2f99bfe8713c182a70ab051f52f3c21b2cdc"
+              redirectUri="http://localhost:3000/login"
+              responseType="code"
+              scope=""
+              buttonText="Sign in with 42"
+              className={classes.root}
+              onSuccess={onSuccess}
+              onFailure={onFailure}
+            />
           </Stack>
-        </div>
-        <Stack spacing={2} style={{ marginTop: '10px' }}>
-          <OAuth2Login
-            id="auth-code-login-btn"
-            authorizationUrl="https://api.intra.42.fr/oauth/authorize"
-            clientId="7f1fe4f23776049319f73d74b48c2f99bfe8713c182a70ab051f52f3c21b2cdc"
-            redirectUri="http://localhost:3000/login"
-            responseType="code"
-            scope=""
-            buttonText="Sign in with 42"
-            className={classes.root}
-            onSuccess={onSuccess}
-            onFailure={onFailure}
-          />
-        </Stack>
-      </Container>
-    </div>
-  );
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default Login;
