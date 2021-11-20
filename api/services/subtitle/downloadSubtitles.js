@@ -113,14 +113,24 @@ async function downloadSubtitles(id, extension, name) {
       });
 
       fs.rmSync(appDir + '/tmp/subtitles/here.zip');
-      fs.rmdirSync(appDir + '/tmp/subtitles/download', { recursive: true });
+      fs.rmSync(appDir + '/tmp/subtitles/download', { recursive: true });
 
-      fs.createReadStream(appDir + '/tmp/subtitles/tmp-srt.srt')
+      const read = fs
+        .createReadStream(appDir + '/tmp/subtitles/tmp-srt.srt')
         .pipe(srt2vtt())
         .pipe(fs.createWriteStream(appDir + '/tmp/subtitles/' + name + '.vtt'));
 
-      fs.rmSync(appDir + '/tmp/subtitles/tmp-srt.srt');
-      resolve(true);
+      read.on('finish', () => {
+        fs.rmSync(appDir + '/tmp/subtitles/tmp-srt.srt');
+        resolve(true);
+      });
+
+      read.on('error', () => {
+        if (fs.existsSync(appDir + '/tmp/subtitles/tmp-srt.srt')) {
+          fs.rmSync(appDir + '/tmp/subtitles/tmp-srt.srt');
+        }
+        resolve(false);
+      });
     } catch (err) {
       resolve(false);
     }
