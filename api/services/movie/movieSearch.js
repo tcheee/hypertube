@@ -12,7 +12,6 @@ function movieSearch(search, uuid) {
       )
       .then(async (result) => {
         if (result.data.data.movie_count > 0) {
-          console.log(result);
           const data = result.data.data.movies;
           const modifiedData = await Promise.all(
             data.map(async (movie) => {

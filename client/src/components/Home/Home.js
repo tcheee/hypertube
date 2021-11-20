@@ -154,16 +154,22 @@ function Home() {
   }, [location]);
 
   const handlePreferences = async () => {
+    console.log('hereee handling preferences');
     setOpen(false);
     if (!location.search) {
       category === 'All' ? fetchMovies('') : fetchMovies(category);
     } else {
-      originalSearch.filter(
-        (movie) =>
-          movie.rating >= rating[0] &&
-          movie.rating <= rating[1] &&
-          movie.year >= productionYear[0] &&
-          movie.year <= productionYear[1]
+      setMovies(
+        sortMovie(
+          sorting,
+          originalSearch.filter(
+            (movie) =>
+              movie.rating >= rating[0] &&
+              movie.rating <= rating[1] &&
+              movie.year >= productionYear[0] &&
+              movie.year <= productionYear[1]
+          )
+        )
       );
     }
   };

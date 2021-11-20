@@ -13,7 +13,6 @@ const getSubtitles = (id, extension) => {
       }
 
       const downloadResult = await downloadSubtitles(id, extension, name);
-      console.log(downloadResult);
       downloadResult ? resolve(pathName) : '';
     } catch (err) {
       console.log('problem while downloading');
