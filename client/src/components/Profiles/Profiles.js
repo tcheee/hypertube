@@ -31,7 +31,7 @@ function Profiles() {
 	      }
 
  return (
-	<div style={{ height: 400, width: '100%', backgroundColor: "#993333" }}>
+	<div style={{ height: 400, width: '100%', backgroundColor: "#F93333" }}>
 	<DataGrid
 	  rows={rows}
 	  columns={columns}
