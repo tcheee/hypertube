@@ -100,10 +100,10 @@ function Register() {
                   variant="filled"
                   required
                   fullWidth
-                  id="email"
+                  id="username"
                   label="Username"
                   name="username"
-                  autoComplete="username"
+                  autoComplete="uname"
                   type="userName"
                   onChange={onInputChangeUserName}
                 />
@@ -117,7 +117,7 @@ function Register() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  autoComplete="email"
+                  autoComplete="eml"
                   type="email"
                   onChange={onInputChangeEmail}
                 />

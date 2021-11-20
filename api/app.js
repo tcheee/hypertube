@@ -15,7 +15,7 @@ const httpServer = require("http").createServer(app);
 
 //Apply several middleware to work with the client
 app.use(express.json({limit: '25mb'}));
-app.use(express.urlencoded({limit: '25mb'}));
+app.use(express.urlencoded({limit: '25mb', extended: true}));
 app.use(cors({credentials: true, origin: 'http://localhost:3000' || ""}));
 
 //Getting the routes from the different routers

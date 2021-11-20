@@ -117,9 +117,9 @@ const onInputChangeFirstName = (event) => {
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
               <input {...getInputProps()} type="file"/>
-              {user.image === "data:image/png;base64," &&
+              {image === "data:image/png;base64," &&
               <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>}
-              {user.image !== null && 
+              {image !== "data:image/png;base64," && 
               <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp"  src={image}/> }
           </div>
           <form className={classes.form} onSubmit={onSubmit} noValidate>
@@ -184,7 +184,7 @@ const onInputChangeFirstName = (event) => {
                 onChange={onInputChangeEmail}
               />
             </Grid>}
-            <FormControl sx={{ m: 1, minWidth: 350 }}>
+            {editable && <FormControl sx={{ m: 1, minWidth: 350 }}>
             <InputLabel id="demo-simple-select-autowidth-label">Choose Subtitle Language</InputLabel>
             <Select
             className={classes.MenuItem}
@@ -199,7 +199,7 @@ const onInputChangeFirstName = (event) => {
             <MenuItem value={"French"}>French</MenuItem>
             <MenuItem value={"Spanish"}>Spanish</MenuItem>
             </Select>
-            </FormControl>
+            </FormControl>}
           </Grid>
             {editable && <Button
               type="submit"
