@@ -4,7 +4,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 router.post('/addMovie', async (req, res) => {
-  console.log(req.body);
   const date = Date.now();
 
   if (req.body.hash) {

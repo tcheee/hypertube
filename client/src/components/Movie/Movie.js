@@ -119,7 +119,6 @@ function updateMovie(hash, movieId, resolution, img) {
       image_link: img,
     })
     .then((res) => {
-      console.log(res);
     });
 }
 
@@ -182,9 +181,6 @@ function Movie() {
         movieId: location.state.id,
         uuid: localStorage.getItem('uuid'),
       })
-      .then((res) => {
-        console.log(res);
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

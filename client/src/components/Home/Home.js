@@ -154,7 +154,6 @@ function Home() {
   }, [location]);
 
   const handlePreferences = async () => {
-    console.log('hereee handling preferences');
     setOpen(false);
     if (!location.search) {
       category === 'All' ? fetchMovies('') : fetchMovies(category);

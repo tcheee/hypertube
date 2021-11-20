@@ -4,7 +4,6 @@ const axios = require('axios');
 const createUser = require('../services/user/create_user.js');
 const loginUser = require('../services/user/login_user');
 const getOrCreateGoogle = require('../services/user/get_or_create_google');
-const checkToken = require('../services/auth/check-token');
 const getUser = require('../services/user/get_user');
 const getAllUser = require('../services/user/get_all_user');
 const resetPassword = require('../services/user/reset_password');

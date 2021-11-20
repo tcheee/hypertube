@@ -9,7 +9,6 @@ const imagetoBase64 = async (url, isPath) => {
 				console.log("GOOD PATH" + path) // /tmp/bar/baz/file
 			      })
 		}
-		console.log("THIS IS " + url)
 		resp = await imageToBase64(url) // Path to the image
 		return resp
 	}
