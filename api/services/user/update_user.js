@@ -8,11 +8,9 @@ const updateUser = async (user) => {
 		},
 		data: {
 		  firstname : user.firstname,
-		  lastName : user.lastName,
+		  lastname : user.lastname,
 		  username: user.username,
-		  comments: user.comments,
 		  language: user.language,
-		  image: user.image,
 		},
 	})
 	return userUpdate

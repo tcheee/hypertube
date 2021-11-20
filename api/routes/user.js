@@ -197,7 +197,7 @@ router.post('/forgetPassword', async (req, res) => {
 });
 
 router.patch('/updateUser', async (req, res) => {
-  if (req.body.user) {
+  if (req.body.user && req.body.user.uuid) {
     userUpdate = await updateUser(req.body.user);
     return res.send({
       message: 'User successfully patch',

@@ -25,7 +25,6 @@ function Profile() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
   // get uuid value from Url
   const location = useLocation()
   const id = location.pathname.replace("/profile/", "")
@@ -41,9 +40,6 @@ const onInputChangeFirstName = (event) => {
  const onInputChangeUserName = (event) => {
   setUserName(event.target.value);
  }
- const onInputChangeEmail = (event) => {
-  setEmail(event.target.value);
- }  
 
   // Check if form must be editable
   useEffect(() => {
@@ -70,7 +66,7 @@ const onInputChangeFirstName = (event) => {
     axios.post("http://localhost:5000/updateimage", { 
       image: image,
       uuid: id,
-    }).then(res => console.log(res.data.user))
+    })
   }, [id]);
 
 
@@ -104,11 +100,16 @@ const onInputChangeFirstName = (event) => {
    // Submit Form
    const onSubmit = (event) => {
     event.preventDefault();
-    console.log(firstName)
-    console.log(lastName)
-    console.log(email)
-    console.log(userName)
-    console.log("SUBMIT")
+    const user = {
+      firstname : firstName,
+      lastname : lastName,
+      username : userName,
+      language: language,
+      uuid: id,
+    }
+    axios.patch("http://localhost:5000/updateUser", {
+      user : user,
+    })
   }
 
   return (
@@ -116,7 +117,7 @@ const onInputChangeFirstName = (event) => {
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <div {...getRootProps({ className: 'dropzone' })}>
-              <input {...getInputProps()} type="file"/>
+              {editable && <input {...getInputProps()} type="file"/>}
               {image === "data:image/png;base64," &&
               <Avatar style={{ width: 100, height: 100, cursor: 'pointer' }} alt="Remy Sharp" src="https://via.placeholder.com/100"/>}
               {image !== "data:image/png;base64," && 
@@ -161,7 +162,7 @@ const onInputChangeFirstName = (event) => {
                 variant="filled"
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="Username"
                 name="username"
                 autoComplete="username"
@@ -181,11 +182,11 @@ const onInputChangeFirstName = (event) => {
                 name="email"
                 autoComplete="email"
                 defaultValue={user.email}
-                onChange={onInputChangeEmail}
+                disabled={true}
               />
             </Grid>}
-            {editable && <FormControl sx={{ m: 1, minWidth: 350 }}>
-            <InputLabel id="demo-simple-select-autowidth-label">Choose Subtitle Language</InputLabel>
+            {editable && <FormControl sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">Choose Language</InputLabel>
             <Select
             className={classes.MenuItem}
             labelId="demo-simple-select-autowidth-label"
@@ -193,7 +194,6 @@ const onInputChangeFirstName = (event) => {
             value={language}
             onChange={handleChange}
             autoWidth
-            label="Age"
             >
             <MenuItem value={"English"}>English</MenuItem>
             <MenuItem value={"French"}>French</MenuItem>
