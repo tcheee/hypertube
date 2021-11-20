@@ -72,6 +72,7 @@ const sortMovie = (type, object) => {
       if (a.title < b.title) {
         return -1;
       }
+      return 0;
     });
     console.log(object);
   }
@@ -95,7 +96,6 @@ function Home() {
   const [movies, setMovies] = useState([]);
   const [originalSearch, setOriginalSearch] = useState([]);
   const [pages, setPages] = useState(1);
-  const [query, setQuery] = useState(null);
   const [error, setError] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const location = useLocation();
@@ -164,7 +164,7 @@ function Home() {
     if (!location.search) {
       category === 'All' ? fetchMovies('') : fetchMovies(category);
     } else {
-      const result = originalSearch.filter(
+      originalSearch.filter(
         (movie) =>
           movie.rating >= rating[0] &&
           movie.rating <= rating[1] &&
@@ -206,7 +206,6 @@ function Home() {
         >
           <Box
             sx={{
-              backgroundColor: 'white',
               width: '500px',
               marginTop: '200px',
               borderRadius: '4%',
@@ -302,7 +301,6 @@ function Home() {
               </div>
               <Button
                 variant="contained"
-                sx={{ marginLeft: 'auto', marginRight: 'auto' }}
                 onClick={() => handlePreferences()}
                 sx={{
                   marginLeft: '190px',

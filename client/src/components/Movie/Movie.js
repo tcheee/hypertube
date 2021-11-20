@@ -1,15 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@mui/material/Box';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -147,11 +145,9 @@ function Movie() {
   const [summary, setSummary] = useState(null);
   const [comment, setComment] = useState(null);
   const [magnet, setMagnet] = useState(null);
-  const [playing, setPlaying] = useState(false);
   const [resolution, setResolution] = useState('720p');
   const [hash, setHash] = useState(null);
   const location = useLocation();
-  const tracks = [];
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -168,6 +164,7 @@ function Movie() {
       if (torrent.quality === resolution) {
         setHash(torrent.hash);
       }
+      return torrent;
     });
     setMagnet(location.state);
   }
@@ -204,6 +201,7 @@ function Movie() {
       if (torrent.quality === resolution) {
         setHash(torrent.hash);
       }
+      return torrent;
     });
   };
 

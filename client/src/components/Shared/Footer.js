@@ -1,8 +1,7 @@
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { useState, useContext,} from 'react';
-import { useHistory,} from 'react-router-dom';
+import { useContext } from 'react';
 import { Context } from '../../context/store';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,9 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Footer() {
   const classes = useStyles();
-  const history = useHistory();
-  const [state, dispatch] = useContext(Context);
-  const [search, setSearch] = useState('');
+  const [state] = useContext(Context);
 
   return (
     <div>
@@ -72,6 +69,7 @@ function Footer() {
                         width: '20px',
                         height: '20px',
                       }}
+                      alt="42 logo"
                       src="https://seeklogo.com/images/1/42_Chip_Ganassi_Racing-logo-918204A8C8-seeklogo.com.png"
                     />
                   </a>

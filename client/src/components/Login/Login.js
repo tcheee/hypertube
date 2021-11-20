@@ -58,7 +58,7 @@ function Login() {
         localStorage.setItem('provider', res.data.provider);
         localStorage.setItem('uuid', res.data.user.uuid);
         dispatch({ type: 'SET_LOGIN' });
-        history.push('home');
+        history.push('/home');
       })
       .catch((error) => {
         confirmAlert({
@@ -96,13 +96,15 @@ function Login() {
     axios
       .post(`http://localhost:5000/login`, { user })
       .then((res) => {
+        console.log(res);
         console.log(res.data);
-        if (res.data.result) {
+        console.log(res.data.result);
+        if (res.data.result === true) {
           localStorage.setItem('accessToken', res.data.accesstoken);
           localStorage.setItem('provider', res.data.provider);
-          localStorage.setItem('uuid', res.data.provider.user.uuid);
+          localStorage.setItem('uuid', res.data.user.uuid);
           dispatch({ type: 'SET_LOGIN' });
-          history.push('/home');
+          history.push('home');
         }
       })
       .catch((error) => {
@@ -136,8 +138,6 @@ function Login() {
       localStorage.setItem('provider', 'google');
       localStorage.setItem('token', res.credential.idToken);
       axios.post(`http://localhost:5000/googleauth`, { user }).then((res) => {
-        console.log(res);
-        console.log(res.data);
         localStorage.setItem('uuid', res.data.user.uuid);
         dispatch({ type: 'SET_LOGIN' });
         history.push('home');
@@ -145,6 +145,12 @@ function Login() {
     }
   };
   const classes = useStyles();
+
+  if (state.login) {
+    history.push('home');
+    return <div></div>;
+  }
+
   return (
     <div>
       <Container component="main" maxWidth="xs">
