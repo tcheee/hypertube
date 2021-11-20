@@ -188,10 +188,12 @@ function Movie() {
       .then((res) => {
         console.log(res);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     updateMovie(hash, location.state.id, resolution, location.state.img);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hash]);
 
   const handleClickResolution = (resolution) => {

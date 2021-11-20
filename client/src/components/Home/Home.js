@@ -157,6 +157,7 @@ function Home() {
         setPages(data.length === 0 ? 0 : Math.floor(data.length / 21) + 1);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const handlePreferences = async () => {

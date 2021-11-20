@@ -10,7 +10,7 @@ import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Context } from '../../context/store';
@@ -91,6 +91,7 @@ function Navbar() {
     isAuth()
       ? dispatch({ type: 'SET_LOGIN' })
       : dispatch({ type: 'SET_LOGOUT' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleProfileMenuOpen = (event) => {
