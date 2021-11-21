@@ -15,6 +15,7 @@ import Profile from './Profile/Profile';
 import isAuth from '../service/decodeToken';
 import Store from '../context/store';
 import Profiles from '../components/Profiles/Profiles';
+import Change from './Change/Change';
 
 function PrivateRoute({ children, ...rest }) {
   return (
@@ -50,6 +51,9 @@ function App() {
           </Route>
           <Route path="/reset-password">
             <Forget />
+          </Route>
+          <Route path="/change-password/:id">
+            <Change/>
           </Route>
           <Route exact path="/">
             <Home />

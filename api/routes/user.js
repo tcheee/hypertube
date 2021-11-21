@@ -6,7 +6,6 @@ const loginUser = require('../services/user/login_user');
 const getOrCreateGoogle = require('../services/user/get_or_create_google');
 const getUser = require('../services/user/get_user');
 const getAllUser = require('../services/user/get_all_user');
-const resetPassword = require('../services/user/reset_password');
 const resend_password = require('../services/user/reset_password');
 const updateUser = require('../services/user/update_user');
 const auth42 = require('../services/auth/auth42');
@@ -14,6 +13,8 @@ const getOrCreate42 = require('../services/user/get_or_create_42');
 const imagetoBase64 = require('../services/image/imagetoBase64');
 const jwt = require('jsonwebtoken');
 const updateImage = require('../services/image/updateImage');
+const resetPassword =  require('../services/user/reset_passwords');
+
 require('dotenv').config();
 // Middleware
 const authMiddleware = async (req, res, next) => {

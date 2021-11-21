@@ -44,7 +44,7 @@ function Forget() {
       .post(`http://localhost:5000/forgetPassword`, { user })
       .then((res) => {
         if (res.data.result) {
-          history.push('/login');
+          history.push('login');
         }
       })
       .catch((error) => {
