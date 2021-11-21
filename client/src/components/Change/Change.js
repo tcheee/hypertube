@@ -39,8 +39,7 @@ function Change() {
    }
 
   const onSubmit = (event) => {
-    console.log(password)
-    console.log(id)
+    event.preventDefault()
     axios.post(`http://localhost:5000/resetpassword`, { 
       password: password,
       id: id,
