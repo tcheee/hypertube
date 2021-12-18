@@ -144,7 +144,7 @@ async function handleStreaming(req, res) {
       launchStreamTorrent(res, hash, range, pathName);
     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     launchStreamTorrent(res, hash, range, pathName);
   }
 }
