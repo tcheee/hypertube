@@ -41,15 +41,18 @@ function Profile() {
 
   // Check if form must be editable
   useEffect(() => {
-    axios.get('/api/userId', { params: { id: id } }).then((res) => {
-      setUser(res.data.user);
-      setImage('data:image/png;base64,' + res.data.user.image);
-      setLanguage(res.data.user.language);
-      setFirstName(res.data.user.firstname);
-      setLastName(res.data.user.lastname);
-      setUserName(res.data.user.email);
-      setLoading(false);
-    });
+    axios
+      .get('http://localhost:5000/userId', { params: { id: id } })
+      .then((res) => {
+        console.log(res);
+        setUser(res.data.user);
+        //setImage("data:image/png;base64," + res.data.user.image )
+        setLanguage(res.data.user.language);
+        setFirstName(res.data.user.firstname);
+        setLastName(res.data.user.lastname);
+        setUserName(res.data.user.email);
+        setLoading(false);
+      });
 
     if (id === localStorage.getItem('uuid')) {
       setEditable(true);
@@ -62,7 +65,7 @@ function Profile() {
       const base64 = await convertBase64(acceptedFiles[0]);
       setImage(base64);
       const image = base64.replace('data:image/png;base64,', '');
-      axios.post('/api/updateimage', {
+      axios.post('http://localhost:5000/updateimage', {
         image: image,
         uuid: id,
       });
@@ -106,7 +109,7 @@ function Profile() {
       language: language,
       uuid: id,
     };
-    axios.patch('/api/updateUser', {
+    axios.patch('http://localhost:5000/updateUser', {
       user: user,
     });
   };
