@@ -109,7 +109,7 @@ function Home() {
     setError(false);
     dispatch({ type: 'START_LOADING' });
     fetch(
-      'http://localhost:5000/api/movie/trending?category=' +
+      'http://localhost:5000/movie/trending?category=' +
         category.toLowerCase() +
         '&page=' +
         page +

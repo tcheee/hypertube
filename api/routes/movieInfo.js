@@ -3,7 +3,7 @@ var router = express.Router();
 const getTrendingMovie = require('../services/movie/trendingMovie');
 const getMovieSearch = require('../services/movie/movieSearch');
 
-router.get('/api/movie/trending', async (req, res) => {
+router.get('/movie/trending', async (req, res) => {
   const result = await getTrendingMovie(
     req.query.category,
     req.query.page,
@@ -12,12 +12,12 @@ router.get('/api/movie/trending', async (req, res) => {
   res.json(result);
 });
 
-router.post('/api/movie/search', async (req, res) => {
+router.post('/movie/search', async (req, res) => {
   const result = await getMovieSearch(req.body.query, req.query.uuid);
   res.json(result);
 });
 
-router.post('/api/movie/:id', async (req, res) => {
+router.post('/movie/:id', async (req, res) => {
   const result = await getMovieSearch(req.body.query, req.query.uuid);
   res.json(result);
 });

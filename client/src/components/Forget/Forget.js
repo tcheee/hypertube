@@ -41,7 +41,7 @@ function Forget() {
       email: email,
     };
     axios
-      .post(`http://localhost:5000/forgetPassword`, { user })
+      .post(`/forgetPassword`, { user })
       .then((res) => {
         if (res.data.result) {
           history.push('login');

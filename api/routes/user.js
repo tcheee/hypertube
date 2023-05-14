@@ -13,7 +13,7 @@ const getOrCreate42 = require('../services/user/get_or_create_42');
 const imagetoBase64 = require('../services/image/imagetoBase64');
 const jwt = require('jsonwebtoken');
 const updateImage = require('../services/image/updateImage');
-const resetPassword =  require('../services/user/reset_passwords');
+const resetPassword = require('../services/user/reset_passwords');
 
 require('dotenv').config();
 // Middleware
@@ -60,12 +60,10 @@ const authMiddleware = async (req, res, next) => {
       }
     }
   } else {
-    res
-      .status(401)
-      .send({
-        message:
-          'You must provide an access token and the provider in order to access these ressources',
-      });
+    res.status(401).send({
+      message:
+        'You must provide an access token and the provider in order to access these ressources',
+    });
   }
 };
 

@@ -1,13 +1,7 @@
-FROM node:alpine
-
-WORKDIR /usr/app
-
-COPY package.json .
-
+FROM node:14.17.1
+WORKDIR '/usr/app'
+COPY ./package.json .
 RUN npm install
-
-RUN npm i axios
-
 COPY . .
-
-CMD ["npm", "start"]
+RUN npm install prisma
+CMD ["npm", "run", "launch"]

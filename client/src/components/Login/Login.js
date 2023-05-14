@@ -51,7 +51,7 @@ function Login() {
   // 42 auth
   const onSuccess = (response) => {
     axios
-      .post(`http://localhost:5000/42auth`, { code: response.code })
+      .post(`/42auth`, { code: response.code })
       .then((res) => {
         localStorage.setItem('accessToken', res.data.user.token);
         localStorage.setItem('provider', res.data.provider);
@@ -93,7 +93,7 @@ function Login() {
       password: passwords,
     };
     axios
-      .post(`http://localhost:5000/login`, { user })
+      .post(`/api/login`, { user })
       .then((res) => {
         if (res.data.result === true) {
           localStorage.setItem('accessToken', res.data.accesstoken);
@@ -133,7 +133,7 @@ function Login() {
       };
       localStorage.setItem('provider', 'google');
       localStorage.setItem('token', res.credential.idToken);
-      axios.post(`http://localhost:5000/googleauth`, { user }).then((res) => {
+      axios.post(`/googleauth`, { user }).then((res) => {
         localStorage.setItem('uuid', res.data.user.uuid);
         dispatch({ type: 'SET_LOGIN' });
         history.push('home');

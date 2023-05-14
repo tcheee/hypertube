@@ -121,7 +121,7 @@ function Navbar() {
     event.target.value = '';
     dispatch({ type: 'START_LOADING' });
     axios
-      .post('http://localhost:5000/api/movie/search', {
+      .post('/api/movie/search', {
         query: search,
       })
       .then(function (response) {

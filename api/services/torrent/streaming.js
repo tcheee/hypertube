@@ -87,6 +87,8 @@ async function launchStreamTorrent(res, hash, range, pathName) {
   let size = 0;
   let pieces = [];
   console.log('new request is done HERE !!!!!!');
+  console.log('giongiongiogno');
+  console.log(streaming_engine);
 
   streaming_engine.on('ready', function () {
     streaming_engine.files.forEach(function (file) {
@@ -135,9 +137,11 @@ async function handleStreaming(req, res) {
   const pathName = appDir + '/tmp/movies/' + hash + '.mp4';
 
   try {
+    console.log(pathName);
+    //launchStreamTorrent(res, hash, range, pathName);
     const stat = fs.statSync(pathName);
     const checkDownload = await isDownloadMovie(hash);
-    if (checkDownload && stat.size > 0) {
+    if (checkDownload && stat && stat.size > 0) {
       launchStreamFS(pathName, range, res, stat.size);
       return;
     } else {

@@ -47,7 +47,7 @@ function Register() {
       email: email,
       password: passwords,
     };
-    axios.post(`http://localhost:5000/hypertubeauth`, { user }).then((res) => {
+    axios.post('/api/hypertubeauth', { user }).then((res) => {
       if (res.data.result) {
         history.push('/login');
       }

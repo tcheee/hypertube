@@ -112,20 +112,19 @@ function a11yProps(index) {
 
 function updateMovie(hash, movieId, resolution, img) {
   axios
-    .post(`http://localhost:5000/addMovie`, {
+    .post(`/api/addMovie`, {
       hash,
       movieId: movieId,
       resolution: resolution,
       image_link: img,
     })
-    .then((res) => {
-    });
+    .then((res) => {});
 }
 
 function postComment(movieId, comment, userId) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`http://localhost:5000/addComment`, {
+      .post(`/api/addComment`, {
         movieId,
         comment,
         userId,
@@ -167,7 +166,7 @@ function Movie() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getCommentsMovie`, {
+      .get(`/api/getCommentsMovie`, {
         params: {
           movieId: location.state.id,
         },
@@ -176,11 +175,10 @@ function Movie() {
         setComments(res.data.comments);
       });
 
-    axios
-      .post(`http://localhost:5000/setMovieSeen`, {
-        movieId: location.state.id,
-        uuid: localStorage.getItem('uuid'),
-      })
+    axios.post(`/api/setMovieSeen`, {
+      movieId: location.state.id,
+      uuid: localStorage.getItem('uuid'),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -254,25 +252,25 @@ function Movie() {
                   >
                     <source
                       label="720p"
-                      src={`http://localhost:5000/api/stream/${hash}`}
+                      src={`http://localhost:5000/stream/${hash}`}
                     />
                     <track
                       label="English"
                       kind="subtitles"
                       srcLang="en"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
+                      src={`/api/subtitles/${location.state.id}-en`}
                     />
                     <track
                       label="French"
                       kind="subtitles"
                       srcLang="fr"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
+                      src={`/api/subtitles/${location.state.id}-fr`}
                     />
                     <track
                       label="Spanish"
                       kind="subtitles"
                       srcLang="es"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
+                      src={`/api/subtitles/${location.state.id}-es`}
                     />
                   </video>
                 </TabPanel>
@@ -285,27 +283,24 @@ function Movie() {
                     crossOrigin="anonymous"
                     className={classes.videoDiv}
                   >
-                    <source
-                      label="1080p"
-                      src={`http://localhost:5000/api/stream/${hash}`}
-                    />
+                    <source label="1080p" src={`/api/stream/${hash}`} />
                     <track
                       label="English"
                       kind="subtitles"
                       srcLang="en"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-en`}
+                      src={`/api/subtitles/${location.state.id}-en`}
                     />
                     <track
                       label="French"
                       kind="subtitles"
                       srcLang="fr"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-fr`}
+                      src={`/api/subtitles/${location.state.id}-fr`}
                     />
                     <track
                       label="Spanish"
                       kind="subtitles"
                       srcLang="es"
-                      src={`http://localhost:5000/api/subtitles/${location.state.id}-es`}
+                      src={`/api/subtitles/${location.state.id}-es`}
                     />
                   </video>
                 </TabPanel>

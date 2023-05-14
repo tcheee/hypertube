@@ -3,9 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useState} from 'react';
+import { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,31 +30,32 @@ const useStyles = makeStyles((theme) => ({
 function Change() {
   const classes = useStyles();
   const [password, SetPassword] = useState('');
-  const location = useLocation()
-  const id = location.pathname.replace("/change-password/", "")
+  const location = useLocation();
+  const id = location.pathname.replace('/change-password/', '');
   const history = useHistory();
 
   const onInputChangePassword = (event) => {
     SetPassword(event.target.value);
-   }
+  };
 
   const onSubmit = (event) => {
-    event.preventDefault()
-    axios.post(`http://localhost:5000/resetpassword`, { 
+    event.preventDefault();
+    axios.post(`/resetpassword`, {
       password: password,
       id: id,
-    })
-    history.push('login')
-  }
+    });
+    history.push('login');
+  };
 
   return (
     <div>
-  `    <Container component="main" maxWidth="xs">
+      `{' '}
+      <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
             Change Password
           </Typography>
-          <form className={classes.form} onSubmit={onSubmit}noValidate>
+          <form className={classes.form} onSubmit={onSubmit} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -79,7 +80,8 @@ function Change() {
             </Button>
           </form>
         </div>
-      </Container>`
+      </Container>
+      `
     </div>
   );
 }
